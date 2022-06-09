@@ -17,7 +17,8 @@ namespace Repository
         void ActiveService(T id);
         void InActiveService(T id);
 
-
+        TEntity GetService(int id);
+        ServiceTable GetService(ServiceTable entity);
 
     }
 }

@@ -145,5 +145,34 @@ namespace Repository
 
             }
         }
+        public ServiceTable GetService(int id)
+        {
+
+            var result = _smartPulseServiceManagerContext?.ServiceTables.SingleOrDefault(t => t.Id == id);
+            TimeSpan timeSpan = new();
+
+
+            result.ActiveLife = (result.CreateDateTime - DateTime.Now).ToString();
+            if (result is null) { return new ServiceTable(); }
+            return result;
+        }
+        /// <summary>
+        /// ServiceName göre servisi tablosundaki veriyi getirir
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public ServiceTable GetService(ServiceTable entity)
+        {
+
+            var result = _smartPulseServiceManagerContext?.ServiceTables.SingleOrDefault(t => t.ServiceName == entity.ServiceName);
+            if (result is null) { throw new Exception("Geçirsiz İsim"); }
+            result.ActiveLife = (entity.CreateDateTime - DateTime.Now).ToString();
+
+
+
+
+            return result;
+
+        }
     }
 }

@@ -46,5 +46,17 @@ namespace ServiceManagerWepApi.Controllers
         {
             _serviceManager!.InActiveService(id);
         }
+        [HttpGet("getservicebyıd")]
+        public ServiceTable GetByIdService(int id)
+        {
+            return _serviceManager!.GetService(id);
+        }
+
+        [HttpGet("getservicebyentity")]
+        public ServiceTable GetByEntityService(ServiceTable serviceTable)
+        {
+            return _serviceManager!.GetService(serviceTable);
+
+        }
     }
 }
