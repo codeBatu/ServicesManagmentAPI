@@ -26,6 +26,10 @@ namespace ServiceManagerWepApi.Controllers
         {
             return Ok(await _serviceManager!.UpdateService(id, serviceTable));
         }
-
+        [HttpDelete("deleteservice")]
+        public async Task<IActionResult> DeleteService(int id)
+        {
+            return Ok(await _serviceManager!.DeleteService(id));
+        }
     }
 }

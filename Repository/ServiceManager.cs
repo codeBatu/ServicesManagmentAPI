@@ -75,6 +75,33 @@ namespace Repository
 
             }
             return serviceMassageModel;
+        }   /// <summary>
+            /// Id göre servisi tablosundaki veriyi siler
+            /// </summary>
+            /// <param name="id"></param>
+            /// <returns></returns>
+        public async Task<ServiceMassageModel> DeleteService(int id)
+        {
+            ServiceMassageModel serviceMassageModel = new();
+            serviceMassageModel.Status = true;
+            serviceMassageModel.Message = "Delete is Succes";
+            var result = _smartPulseServiceManagerContext!.ServiceTables.FirstOrDefault(t => t.Id == id);
+            if (result is null)
+            {
+                serviceMassageModel.Status = false;
+                serviceMassageModel.Message = "Geçersiz Id ";
+                throw new Exception(serviceMassageModel.Message);
+
+            }
+            var saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
+            if (saveResponseCode != 1)
+            {
+                serviceMassageModel.Status = false;
+                serviceMassageModel.Message = "Remove is Fail ";
+                throw new Exception(serviceMassageModel.Message);
+
+            }
+            return serviceMassageModel;
         }
     }
 }
