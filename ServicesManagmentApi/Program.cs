@@ -9,7 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen().AddSingleton<SmartPulseServiceManagerContext>().AddScoped<IServiceManager<ServiceTable, ServiceMassageModel, int>, ServiceManager>(); ;
+builder.Services.AddSwaggerGen().AddSingleton<SmartPulseServiceManagerContext>()
+   .AddScoped<ServiceLayer.ServicesLayer>()
+    .AddScoped<IServiceManager<ServiceTable, ServiceMassageModel, int>, ServiceManager>();
 
 var app = builder.Build();
 

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Model;
 using Repository;
+using ServiceLayer;
 
 namespace ServiceManagerWepApi.Controllers
 {
@@ -9,9 +10,9 @@ namespace ServiceManagerWepApi.Controllers
     [ApiController]
     public class ServiceController : ControllerBase
     {
-        private readonly ServiceManager _serviceManager;
+        private readonly ServicesLayer? _serviceManager;
 
-        public ServiceController(ServiceManager? serviceManager)
+        public ServiceController(ServicesLayer? serviceManager)
         {
             _serviceManager = serviceManager;
         }
