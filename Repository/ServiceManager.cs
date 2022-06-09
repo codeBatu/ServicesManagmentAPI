@@ -103,5 +103,47 @@ namespace Repository
             }
             return serviceMassageModel;
         }
+        public async void ActiveService(int id)
+        {
+            ServiceTable serviceTable = new() { ServiceStatus = (int)ServiceStatusEnum.Active, };
+            //   serviceTable.ServiceStatus=(int)ServiceStatusEnum.Active;
+            var result = _smartPulseServiceManagerContext!.ServiceTables.FirstOrDefault(t => t.Id == id);
+            if (result == null) throw new Exception("Geçersiz Id");
+            _smartPulseServiceManagerContext.ServiceTables.Update(serviceTable);
+            int saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
+            if (saveResponseCode != 1)
+            {
+                throw new Exception("Service active is fail");
+            }
+        }
+        public async void InActiveService(int id)
+        {
+            ServiceTable serviceTable = new();
+            serviceTable.ServiceStatus = (int)ServiceStatusEnum.Inactive;
+            var result = _smartPulseServiceManagerContext!.ServiceTables.FirstOrDefault(t => t.Id == id);
+            if (result == null) throw new Exception("Geçersiz Id");
+            _smartPulseServiceManagerContext.ServiceTables.Update(serviceTable);
+            int saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
+            if (saveResponseCode != 1)
+            {
+                throw new Exception("Service active is fail");
+            }
+        }
+        public async void RestartService(int id)
+        {
+            var result = _smartPulseServiceManagerContext?.ServiceTables.SingleOrDefault(t => t.Id == id);
+            if (result is null) { throw new Exception("Geçersiz Id"); }
+            ServiceTable serviceTable = new();
+            serviceTable.RestDateTime = DateTime.Now;
+            result.RestartCount += 1;
+            _smartPulseServiceManagerContext?.ServiceTables.Update(serviceTable);
+            var saveResponseCode = await _smartPulseServiceManagerContext!.SaveChangesAsync();
+            if (saveResponseCode != 1)
+            {
+
+                throw new Exception("Restart is fail");
+
+            }
+        }
     }
 }

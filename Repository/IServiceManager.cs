@@ -13,7 +13,9 @@ namespace Repository
         Task<TServiceMessageModel> CreateService(TEntity entity);
         Task<TServiceMessageModel> UpdateService(T id, TEntity entity);
         Task<TServiceMessageModel> DeleteService(T id);
-
+        void RestartService(T id);
+        void ActiveService(T id);
+        void InActiveService(T id);
 
 
 

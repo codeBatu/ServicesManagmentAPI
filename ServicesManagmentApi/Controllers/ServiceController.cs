@@ -31,5 +31,20 @@ namespace ServiceManagerWepApi.Controllers
         {
             return Ok(await _serviceManager!.DeleteService(id));
         }
+        [HttpGet("restart")]
+        public void RestartServices(int id)
+        {
+            _serviceManager!.RestartService(id);
+        }
+        [HttpGet("Active")]
+        public void ActiveServicesById(int id)
+        {
+            _serviceManager!.ActiveService(id);
+        }
+        [HttpGet("InActive")]
+        public void InActiveServicesById(int id)
+        {
+            _serviceManager!.InActiveService(id);
+        }
     }
 }
