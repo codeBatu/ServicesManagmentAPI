@@ -18,7 +18,8 @@ namespace Repository
         void InActiveService(T id);
 
         TEntity GetService(int id);
-        ServiceTable GetService(ServiceTable entity);
+        TEntity GetService(TEntity entity);
+        List<TEntity> GetAllServices();
 
     }
 }

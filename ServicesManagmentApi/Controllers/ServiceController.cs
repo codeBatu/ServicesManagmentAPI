@@ -51,6 +51,11 @@ namespace ServiceManagerWepApi.Controllers
         {
             return _serviceManager!.GetService(id);
         }
+        [HttpGet("getallservice")]
+        public List<ServiceTable> GetAllService()
+        {
+            return _serviceManager!.GetAllService();
+        }
 
         [HttpGet("getservicebyentity")]
         public ServiceTable GetByEntityService(ServiceTable serviceTable)

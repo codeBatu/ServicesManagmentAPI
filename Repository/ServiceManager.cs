@@ -156,6 +156,13 @@ namespace Repository
             if (result is null) { return new ServiceTable(); }
             return result;
         }
+        public List<ServiceTable> GetAllServices()
+        {
+            var result = _smartPulseServiceManagerContext?.ServiceTables.ToList();
+
+            if (result is null) { return new List<ServiceTable>(); }
+            return result;
+        }
         /// <summary>
         /// ServiceName göre servisi tablosundaki veriyi getirir
         /// </summary>
