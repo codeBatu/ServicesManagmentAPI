@@ -21,7 +21,11 @@ namespace ServiceManagerWepApi.Controllers
         {
             return Ok(await  _serviceManager!.CreateService(serviceTable));
         }
-
+        [HttpPut("updateservice")]
+        public async Task<IActionResult> UpdateService(int id, [FromBody] ServiceTable serviceTable)
+        {
+            return Ok(await _serviceManager!.UpdateService(id, serviceTable));
+        }
 
     }
 }

@@ -11,8 +11,9 @@ namespace Repository
     {
 
         Task<TServiceMessageModel> CreateService(TEntity entity);
-     
-            
+        Task<TServiceMessageModel> UpdateService(T id, TEntity entity);
+
+
 
 
     }

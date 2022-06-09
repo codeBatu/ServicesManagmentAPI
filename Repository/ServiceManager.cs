@@ -52,5 +52,29 @@ namespace Repository
       
        
         }
+        public async Task<ServiceMassageModel> UpdateService(int id, ServiceTable entity)
+        {
+            ServiceMassageModel serviceMassageModel = new();
+            serviceMassageModel.Status = true;
+            serviceMassageModel.Message = "Update is Succes";
+            var result = _smartPulseServiceManagerContext!.ServiceTables.FirstOrDefault(t => t.Id == id);
+            if (result is null)
+            {
+                serviceMassageModel.Status = false;
+                serviceMassageModel.Message = "Geçersiz Id ";
+                throw new Exception(serviceMassageModel.Message);
+
+            }
+            _smartPulseServiceManagerContext.Update(entity);
+            var saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
+            if (saveResponseCode != 1)
+            {
+                serviceMassageModel.Status = false;
+                serviceMassageModel.Message = "Update is Fail ";
+                throw new Exception(serviceMassageModel.Message);
+
+            }
+            return serviceMassageModel;
+        }
     }
 }
