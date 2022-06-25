@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Repository.RepositoryInterface
 {
-    public interface ILogRepository :IGenericRepository<LogTable, LogServiceMessageModel,int>
+    public interface ILogRepository :IGenericRepository<LogTable,int>
     {
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Model;
+using Model.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,15 +8,14 @@ using System.Threading.Tasks;
 
 namespace Repository.RepositoryInterface
 {
-    public interface IServiceManagerRepository : IGenericRepository<ServiceTable, ServiceMassageModel, int>
+    public interface IServiceManagerRepository : IGenericRepository<ServiceTable, int>
     {
 
-        void RestartService(int id);
-        void ActiveService(int id);
-        void InActiveService(int id);
+        Task<IResult> RestartService(int id);
+        Task<IResult> ActiveService(int id);
+        Task<IResult> InActiveService(int id);
 
-        ServiceTable GetServiceById(int id);
-        ServiceTable GetService(ServiceTable entity);
+        IDataResult<ServiceTable> GetService(ServiceTable entity);
       
 
     }

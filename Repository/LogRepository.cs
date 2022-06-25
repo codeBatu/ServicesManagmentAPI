@@ -1,4 +1,5 @@
 ﻿using Model;
+using Model.Results;
 using Repository.DbContexts;
 using Repository.RepositoryInterface;
 using System;
@@ -18,22 +19,32 @@ namespace Repository
             _smartPulseServiceManagerContext = smartPulseServiceManagerContext;
         }
 
-        public Task<LogServiceMessageModel> Create(LogTable entity)
+        public Task<IResult> Create(LogTable entity)
         {
             throw new NotImplementedException();
         }
 
-        public Task<LogServiceMessageModel> Delete(int id)
+        public Task<IResult> Delete(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<LogTable>> GetAll()
+        public IDataResult<LogTable> Get(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<LogServiceMessageModel> Update(int id, LogTable entity)
+        public Task<IDataResult<List<LogTable>>> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IResult> Update(int id, LogTable entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        List<LogTable> IGenericRepository<LogTable, int>.GetAll()
         {
             throw new NotImplementedException();
         }
