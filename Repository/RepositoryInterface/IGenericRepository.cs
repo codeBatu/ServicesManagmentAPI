@@ -1,4 +1,5 @@
-﻿using Model.Results;
+﻿using Model;
+using Model.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,7 @@ namespace Repository.RepositoryInterface
     public interface IGenericRepository<TEntity, T>
     {
         Task<IResult> Create(TEntity entity);
-        Task<IResult> Update(T id, TEntity entity);
-        Task<IResult> Delete(T id);
         IDataResult<TEntity> Get(int id);
-        List<TEntity> GetAll();
+        IDataResult<List<TEntity>> GetAll();
     }
 }

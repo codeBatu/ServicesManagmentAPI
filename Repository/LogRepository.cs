@@ -24,27 +24,13 @@ namespace Repository
             throw new NotImplementedException();
         }
 
-        public Task<IResult> Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
 
         public IDataResult<LogTable> Get(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IDataResult<List<LogTable>>> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IResult> Update(int id, LogTable entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        List<LogTable> IGenericRepository<LogTable, int>.GetAll()
+        public IDataResult<List<LogTable>> GetAll()
         {
             throw new NotImplementedException();
         }

@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
 using Model;
 using Model.Results;
 using Repository.DbContexts;
@@ -131,7 +132,7 @@ namespace Repository
         /// <returns></returns>
         public IDataResult<ServiceTable> GetService(ServiceTable entity)
         {
-            var result = _smartPulseServiceManagerContext?.ServiceTables.SingleOrDefault(t => t.ServiceName == entity.ServiceName);
+            var result = _smartPulseServiceManagerContext?.ServiceTables.Include(s => s.LogTables).SingleOrDefault(t => t.ServiceName == entity.ServiceName);
             if (result is null) return new ErrorDataResult<ServiceTable>("Bu isimde bir servis bulunamadı!");
             result.ActiveLife = (DateTime.Now - result.CreateDateTime).ToString();
             return new SuccessDataResult<ServiceTable>(result);
@@ -139,15 +140,16 @@ namespace Repository
         
         public IDataResult<ServiceTable> Get(int id)
         {
-            var service = _smartPulseServiceManagerContext?.ServiceTables.SingleOrDefault(s => s.Id == id);
+            var service = _smartPulseServiceManagerContext?.ServiceTables.Include(s => s.LogTables).SingleOrDefault(s => s.Id == id);
             if (service is null) return new ErrorDataResult<ServiceTable>("Geçersiz id!");
             service.ActiveLife = (DateTime.Now - service.CreateDateTime).ToString();
             return new SuccessDataResult<ServiceTable>(service);
         }
 
-        public List<ServiceTable> GetAll()
+        public IDataResult<List<ServiceTable>> GetAll()
         {
-            return _smartPulseServiceManagerContext?.ServiceTables.ToList();
+            var list = _smartPulseServiceManagerContext.ServiceTables.Include(s => s.LogTables).ToList();
+            return new SuccessDataResult<List<ServiceTable>>(list);
         }
     }
 }
