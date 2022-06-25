@@ -25,7 +25,7 @@ namespace Repository.DbContexts
             if (!optionsBuilder.IsConfigured)
             {
 
-                optionsBuilder.UseSqlServer("Data Source=BATU;Initial Catalog=SmartPulseServiceManager;Persist Security Info=True;User ID=sa;Password=1478");
+                optionsBuilder.UseSqlServer("Data Source=BURAKPC;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
             }
         }
 
