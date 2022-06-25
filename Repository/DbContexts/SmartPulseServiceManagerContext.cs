@@ -17,8 +17,8 @@ namespace Repository.DbContexts
         {
         }
 
-        public virtual DbSet<LogTable> LogTables { get; set; } = null!;
-        public virtual DbSet<ServiceTable> ServiceTables { get; set; } = null!;
+        public virtual DbSet<LogTable> LogTable { get; set; } = null!;
+        public virtual DbSet<ServiceTable> ServiceTable { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

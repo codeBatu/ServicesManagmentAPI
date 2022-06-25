@@ -1,3 +1,5 @@
+using Business.Abstract;
+using Business.Concrete;
 using Model;
 using Repository;
 using Repository.DbContexts;
@@ -11,8 +13,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen().AddSingleton<SmartPulseServiceManagerContext>()
-   .AddScoped<ServiceLayer.ServicesLayer>()
-    .AddScoped<IServiceManagerRepository, ServiceManagerRepository>();
+    .AddScoped<IServiceManagerRepository, ServiceManagerRepository>()
+    .AddScoped<ILogRepository, LogRepository>()
+    .AddScoped<IServiceSupply, ServiceManager>();
 
 var app = builder.Build();
 
