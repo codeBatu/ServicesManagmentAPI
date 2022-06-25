@@ -8,61 +8,51 @@ namespace ServiceManagerWepApi.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class ServiceController : ControllerBase
+    public class serviceController : ControllerBase
     {
         private readonly ServicesLayer? _serviceManager;
 
-        public ServiceController(ServicesLayer? serviceManager)
+        public serviceController(ServicesLayer? serviceManager)
         {
             _serviceManager = serviceManager;
         }
 
-        [HttpPost("createservice")]
+        [HttpPost("createService")]
         public async Task<IActionResult> CreateService([FromBody]ServiceTable serviceTable)
         {
             return Ok(await  _serviceManager!.CreateService(serviceTable));
         }
-        [HttpPut("updateservice")]
+        [HttpPut("updateService")]
         public async Task<IActionResult> UpdateService(int id, [FromBody] ServiceTable serviceTable)
         {
             return Ok(await _serviceManager!.UpdateService(id, serviceTable));
         }
-        [HttpDelete("deleteservice")]
+        [HttpDelete("deleteService")]
         public async Task<IActionResult> DeleteService(int id)
         {
             return Ok(await _serviceManager!.DeleteService(id));
         }
-        [HttpGet("restart")]
+        [HttpPut("restartService")]
         public void RestartServices(int id)
         {
             _serviceManager!.RestartService(id);
         }
-        [HttpGet("Active")]
+        [HttpPut("activeService")]
         public void ActiveServicesById(int id)
         {
             _serviceManager!.ActiveService(id);
         }
-        [HttpGet("InActive")]
+        [HttpPut("inActiveService")]
         public void InActiveServicesById(int id)
         {
             _serviceManager!.InActiveService(id);
         }
-        [HttpGet("getservicebyıd")]
-        public ServiceTable GetByIdService(int id)
-        {
-            return _serviceManager!.GetService(id);
-        }
-        [HttpGet("getallservice")]
+        
+        [HttpGet("getAllService")]
         public List<ServiceTable> GetAllService()
         {
             return _serviceManager!.GetAllService();
         }
 
-        [HttpGet("getservicebyentity")]
-        public ServiceTable GetByEntityService(ServiceTable serviceTable)
-        {
-            return _serviceManager!.GetService(serviceTable);
-
-        }
     }
 }

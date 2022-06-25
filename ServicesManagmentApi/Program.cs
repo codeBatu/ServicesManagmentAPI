@@ -1,6 +1,7 @@
 using Model;
 using Repository;
 using Repository.DbContexts;
+using Repository.RepositoryInterface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen().AddSingleton<SmartPulseServiceManagerContext>()
    .AddScoped<ServiceLayer.ServicesLayer>()
-    .AddScoped<IServiceManager<ServiceTable, ServiceMassageModel, int>, ServiceManager>();
+    .AddScoped<IServiceManagerRepository, ServiceManagerRepository>();
 
 var app = builder.Build();
 

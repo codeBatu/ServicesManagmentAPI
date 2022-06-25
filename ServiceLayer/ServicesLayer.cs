@@ -1,6 +1,7 @@
 ﻿using Model;
 using Repository;
 using Repository.DbContexts;
+using Repository.RepositoryInterface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,10 @@ namespace ServiceLayer
 {
     public class ServicesLayer
     {
-    
-
-        private readonly IServiceManager<ServiceTable, ServiceMassageModel, int> _serviceManager;
+   
+        private readonly IServiceManagerRepository _serviceManager;
         private readonly SmartPulseServiceManagerContext? _smartPulseServiceManagerContext;
-        public ServicesLayer(IServiceManager<ServiceTable, ServiceMassageModel, int> serviceManager, SmartPulseServiceManagerContext? smartPulseServiceManagerContext)
+        public ServicesLayer(IServiceManagerRepository serviceManager, SmartPulseServiceManagerContext? smartPulseServiceManagerContext)
         {
             _smartPulseServiceManagerContext = smartPulseServiceManagerContext;
             _serviceManager = serviceManager;
@@ -57,7 +57,7 @@ namespace ServiceLayer
         public async Task<ServiceMassageModel> CreateService(ServiceTable entity)
         {
 
-            var result = await _serviceManager.CreateService(entity);
+            var result = await _serviceManager.Create(entity);
             if (result.Status == false)
             {
                 logTable.ServiceId = entity.Id;
@@ -82,7 +82,7 @@ namespace ServiceLayer
         /// <returns></returns>
         public async Task<ServiceMassageModel> DeleteService(int id)
         {
-            var result = await _serviceManager.DeleteService(id);
+            var result = await _serviceManager.Delete(id);
             if (result.Status == false)
             {
                 logTable.ServiceId = id;
@@ -100,17 +100,7 @@ namespace ServiceLayer
             await _smartPulseServiceManagerContext.SaveChangesAsync();
             return result;
         }
-        /// <summary>
-        /// Id göre servisi tablosundaki veriyi getirir
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public ServiceTable GetService(int id)
-        {
-            return  _serviceManager.GetService(id);
-         
-     
-        }
+        
         /// <summary>
         /// ServiceName göre servisi tablosundaki veriyi getirir
         /// </summary>
@@ -123,7 +113,7 @@ namespace ServiceLayer
         }
         public List<ServiceTable> GetAllService()
         {
-            return _serviceManager.GetAllServices();
+            throw new Exception();
 
         }
 
@@ -175,7 +165,7 @@ namespace ServiceLayer
 
         public async Task<ServiceMassageModel> UpdateService(int id, ServiceTable entity)
         {
-            var result = await _serviceManager.UpdateService(id,entity);
+            var result = await _serviceManager.Update(id,entity);
             if (result.Status == false)
             {
                 logTable.ServiceId = id;

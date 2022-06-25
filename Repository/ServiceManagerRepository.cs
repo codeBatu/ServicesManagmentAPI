@@ -1,6 +1,7 @@
 ﻿
 using Model;
 using Repository.DbContexts;
+using Repository.RepositoryInterface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace Repository
 {
-    public class ServiceManager : IServiceManager<ServiceTable,ServiceMassageModel,int>
+    public class ServiceManagerRepository : IServiceManagerRepository
     {
         private readonly SmartPulseServiceManagerContext? _smartPulseServiceManagerContext;
 
-        public ServiceManager(SmartPulseServiceManagerContext? smartPulseServiceManagerContext)
+        public ServiceManagerRepository(SmartPulseServiceManagerContext? smartPulseServiceManagerContext)
         {
             _smartPulseServiceManagerContext = smartPulseServiceManagerContext;
         }
@@ -27,7 +28,7 @@ namespace Repository
         /// </summary>
         /// <param name="entity"></param>
         /// <returns>ServiceMassageModel Döner</returns>
-        public async Task<ServiceMassageModel> CreateService(ServiceTable entity)
+        public async Task<ServiceMassageModel> Create(ServiceTable entity)
         {
             ServiceMassageModel serviceMassageModel = new();
             serviceMassageModel.Status = true;
@@ -52,7 +53,7 @@ namespace Repository
       
        
         }
-        public async Task<ServiceMassageModel> UpdateService(int id, ServiceTable entity)
+        public async Task<ServiceMassageModel> Update(int id, ServiceTable entity)
         {
             ServiceMassageModel serviceMassageModel = new();
             serviceMassageModel.Status = true;
@@ -80,7 +81,7 @@ namespace Repository
             /// </summary>
             /// <param name="id"></param>
             /// <returns></returns>
-        public async Task<ServiceMassageModel> DeleteService(int id)
+        public async Task<ServiceMassageModel> Delete(int id)
         {
             ServiceMassageModel serviceMassageModel = new();
             serviceMassageModel.Status = true;
@@ -180,6 +181,16 @@ namespace Repository
 
             return result;
 
+        }
+
+        public ServiceTable GetServiceById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<ServiceTable>> GetAll()
+        {
+            throw new NotImplementedException();
         }
     }
 }
