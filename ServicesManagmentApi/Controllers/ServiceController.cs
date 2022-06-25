@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Business.Abstract;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 using Repository;
-using ServiceLayer;
 
 namespace ServiceManagerWepApi.Controllers
 {
@@ -10,9 +10,9 @@ namespace ServiceManagerWepApi.Controllers
     [ApiController]
     public class serviceController : ControllerBase
     {
-        private readonly ServicesLayer? _serviceManager;
+        private readonly IServiceSupply? _serviceManager;
 
-        public serviceController(ServicesLayer? serviceManager)
+        public serviceController(IServiceSupply? serviceManager)
         {
             _serviceManager = serviceManager;
         }
@@ -20,38 +20,73 @@ namespace ServiceManagerWepApi.Controllers
         [HttpPost("createService")]
         public async Task<IActionResult> CreateService([FromBody]ServiceTable serviceTable)
         {
-            return Ok(await  _serviceManager!.CreateService(serviceTable));
+            var result = await _serviceManager!.Create(serviceTable);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
         [HttpPut("updateService")]
         public async Task<IActionResult> UpdateService(int id, [FromBody] ServiceTable serviceTable)
         {
-            return Ok(await _serviceManager!.UpdateService(id, serviceTable));
+            var result = await _serviceManager!.Update(id,serviceTable);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
         [HttpDelete("deleteService")]
         public async Task<IActionResult> DeleteService(int id)
         {
-            return Ok(await _serviceManager!.DeleteService(id));
+            var result = await _serviceManager!.Delete(id);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
         [HttpPut("restartService")]
-        public void RestartServices(int id)
+        public async Task<IActionResult> RestartServices(int id)
         {
-            _serviceManager!.RestartService(id);
+            var result = await _serviceManager!.RestartService(id);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
         [HttpPut("activeService")]
-        public void ActiveServicesById(int id)
+        public async Task<IActionResult> ActiveServicesById(int id)
         {
-            _serviceManager!.ActiveService(id);
+            var result = await _serviceManager!.ActiveService(id);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
         [HttpPut("inActiveService")]
-        public void InActiveServicesById(int id)
+        public async Task<IActionResult> InActiveServicesById(int id)
         {
-            _serviceManager!.InActiveService(id);
+            var result = await _serviceManager!.InActiveService(id);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
         
         [HttpGet("getAllService")]
-        public List<ServiceTable> GetAllService()
+        public IActionResult GetAllService()
         {
-            return _serviceManager!.GetAllService();
+            var result = _serviceManager!.GetAll();
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
     }

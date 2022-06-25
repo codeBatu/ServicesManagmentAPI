@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Model
+namespace Model.Results;
+
+public interface IDataResult<T> : IResult
 {
-    public class LogServiceMessageModel :BaseResponseMessageModel
-    {
-    }
+    T Data { get; }
 }

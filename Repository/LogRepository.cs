@@ -1,4 +1,5 @@
 ﻿using Model;
+using Model.Results;
 using Repository.DbContexts;
 using Repository.RepositoryInterface;
 using System;
@@ -18,24 +19,29 @@ namespace Repository
             _smartPulseServiceManagerContext = smartPulseServiceManagerContext;
         }
 
-        public Task<LogServiceMessageModel> Create(LogTable entity)
+        public async Task<IResult> Create(LogTable entity)
         {
-            throw new NotImplementedException();
+            _smartPulseServiceManagerContext!.Add(entity);
+            var saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
+            if (saveResponseCode != 1)
+            {
+                return new ErrorResult("Log kaydedilemedi!");
+
+            }
+            return new SuccessResult("Log başarıyla kaydedildi.");
         }
 
-        public Task<LogServiceMessageModel> Delete(int id)
+        public IDataResult<LogTable> Get(int serviceId)
         {
-            throw new NotImplementedException();
+            var log = _smartPulseServiceManagerContext?.LogTable.SingleOrDefault(l => l.ServiceId == serviceId);
+            if (log is null) return new ErrorDataResult<LogTable>("Geçersiz id!");
+            return new SuccessDataResult<LogTable>(log);
         }
 
-        public Task<List<LogTable>> GetAll()
+        public IDataResult<List<LogTable>> GetAll()
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<LogServiceMessageModel> Update(int id, LogTable entity)
-        {
-            throw new NotImplementedException();
+            var list = _smartPulseServiceManagerContext.LogTable.ToList();
+            return new SuccessDataResult<List<LogTable>>(list);
         }
     }
 }
