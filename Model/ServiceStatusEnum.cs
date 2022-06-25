@@ -5,6 +5,5 @@ namespace Model
     {
         Active= 0,
         Inactive=1,
-        
     }
 }
