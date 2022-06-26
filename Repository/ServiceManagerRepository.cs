@@ -30,7 +30,7 @@ namespace Repository
         /// <returns>ServiceMassageModel Döner</returns>
         public async Task<IResult> Create(ServiceTable entity)
         {
-            var result = _smartPulseServiceManagerContext!.ServiceTable.FirstOrDefault(t => t.ServiceName == entity.ServiceName);
+            var result = _smartPulseServiceManagerContext!.ServiceTables.FirstOrDefault(t => t.ServiceName == entity.ServiceName);
             if (result is not null)
             {
                 return new ErrorResult("Aynı isimde servis sistemde kayıtlı.");
@@ -46,7 +46,7 @@ namespace Repository
         }
         public async Task<IResult> Update(int id, ServiceTable entity)
         {
-            var result = _smartPulseServiceManagerContext!.ServiceTable.FirstOrDefault(t => t.Id == id);
+            var result = _smartPulseServiceManagerContext!.ServiceTables.FirstOrDefault(t => t.Id == id);
             if (result is null)
             {
                 return new ErrorResult("Geçersiz id");
@@ -66,7 +66,7 @@ namespace Repository
             /// <returns></returns>
         public async Task<IResult> Delete(int id)
         {
-            var result = _smartPulseServiceManagerContext!.ServiceTable.FirstOrDefault(t => t.Id == id);
+            var result = _smartPulseServiceManagerContext!.ServiceTables.FirstOrDefault(t => t.Id == id);
             if (result is null)
             {
                 return new ErrorResult("Geçersiz id");
@@ -82,14 +82,14 @@ namespace Repository
         // Servisi aktive eder.
         public async Task<IResult> ActiveService(int id)
         {
-            var result = _smartPulseServiceManagerContext!.ServiceTable.FirstOrDefault(t => t.Id == id);
+            var result = _smartPulseServiceManagerContext!.ServiceTables.FirstOrDefault(t => t.Id == id);
             if (result == null) return new ErrorResult("Geçersiz id");
 
             if(result.ServiceStatus == (int)ServiceStatusEnum.Active)
                 return new ErrorResult("Servis zaten aktif!");
 
             result.ServiceStatus = (int)ServiceStatusEnum.Active;
-            _smartPulseServiceManagerContext.ServiceTable.Update(result);
+            _smartPulseServiceManagerContext.ServiceTables.Update(result);
             int saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
             if (saveResponseCode != 1)
             {
@@ -99,11 +99,11 @@ namespace Repository
         }
         public async Task<IResult> InActiveService(int id)
         {
-            var result = _smartPulseServiceManagerContext!.ServiceTable.FirstOrDefault(t => t.Id == id);
+            var result = _smartPulseServiceManagerContext!.ServiceTables.FirstOrDefault(t => t.Id == id);
             if (result == null) return new ErrorResult("Geçersiz id");
 
             result.ServiceStatus = (int)ServiceStatusEnum.Inactive;
-            _smartPulseServiceManagerContext.ServiceTable.Update(result);
+            _smartPulseServiceManagerContext.ServiceTables.Update(result);
             int saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
             if (saveResponseCode != 1)
             {
@@ -113,12 +113,12 @@ namespace Repository
         }
         public async Task<IResult> RestartService(int id)
         {
-            var result = _smartPulseServiceManagerContext?.ServiceTable.SingleOrDefault(t => t.Id == id);
+            var result = _smartPulseServiceManagerContext?.ServiceTables.SingleOrDefault(t => t.Id == id);
             if (result is null) return new ErrorResult("Geçersiz id");
 
             result.RestDateTime = DateTime.Now;
             result.RestartCount += 1;
-            _smartPulseServiceManagerContext?.ServiceTable.Update(result);
+            _smartPulseServiceManagerContext?.ServiceTables.Update(result);
             var saveResponseCode = await _smartPulseServiceManagerContext!.SaveChangesAsync();
             if (saveResponseCode != 1)
             {
@@ -135,7 +135,7 @@ namespace Repository
         /// <returns></returns>
         public IDataResult<ServiceTable> GetService(ServiceTable entity)
         {
-            var result = _smartPulseServiceManagerContext?.ServiceTable.Include(s => s.LogTables).SingleOrDefault(t => t.ServiceName == entity.ServiceName);
+            var result = _smartPulseServiceManagerContext?.ServiceTables.Include(s => s.LogTables).SingleOrDefault(t => t.ServiceName == entity.ServiceName);
             if (result is null) return new ErrorDataResult<ServiceTable>("Bu isimde bir servis bulunamadı!");
             result.ActiveLife = (DateTime.Now - result.CreateDateTime).ToString();
             return new SuccessDataResult<ServiceTable>(result);
@@ -143,7 +143,7 @@ namespace Repository
         
         public IDataResult<ServiceTable> Get(int id)
         {
-            var service = _smartPulseServiceManagerContext?.ServiceTable.Include(s => s.LogTables).SingleOrDefault(s => s.Id == id);
+            var service = _smartPulseServiceManagerContext?.ServiceTables.Include(s => s.LogTables).SingleOrDefault(s => s.Id == id);
             if (service is null) return new ErrorDataResult<ServiceTable>("Geçersiz id!");
             service.ActiveLife = (DateTime.Now - service.CreateDateTime).ToString();
             return new SuccessDataResult<ServiceTable>(service);
@@ -151,7 +151,7 @@ namespace Repository
 
         public IDataResult<List<ServiceTable>> GetAll()
         {
-            var list = _smartPulseServiceManagerContext.ServiceTable.Include(s => s.LogTables).ToList();
+            var list = _smartPulseServiceManagerContext.ServiceTables.Include(s => s.LogTables).ToList();
             return new SuccessDataResult<List<ServiceTable>>(list);
         }
     }

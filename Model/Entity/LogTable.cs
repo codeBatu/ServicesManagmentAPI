@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Model
+namespace Model.Entity
+
 {
-    public partial class LogTable
+    public  class LogTable
     {
         public LogTable()
         {

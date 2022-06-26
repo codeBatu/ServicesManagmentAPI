@@ -16,17 +16,8 @@ namespace ServiceManagerWepApi.Controllers
         {
             _serviceManager = serviceManager;
         }
-
-        [HttpPost("createService")]
-        public async Task<IActionResult> CreateService([FromBody]ServiceTable serviceTable)
-        {
-            var result = await _serviceManager!.Create(serviceTable);
-            if (!result.Success)
-            {
-                return BadRequest(result);
-            }
-            return Ok(result);
-        }
+   
+     
         [HttpPut("updateService")]
         public async Task<IActionResult> UpdateService(int id, [FromBody] ServiceTable serviceTable)
         {
@@ -57,6 +48,7 @@ namespace ServiceManagerWepApi.Controllers
             }
             return Ok(result);
         }
+       
         [HttpPut("activeService")]
         public async Task<IActionResult> ActiveServicesById(int id)
         {
@@ -77,6 +69,7 @@ namespace ServiceManagerWepApi.Controllers
             }
             return Ok(result);
         }
+       
         
         [HttpGet("getAllService")]
         public IActionResult GetAllService()

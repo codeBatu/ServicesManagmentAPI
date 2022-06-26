@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Model
+namespace Model.Entity
 {
-    public partial class ServiceTable
+    public  class ServiceTable
     {
         public ServiceTable()
         {
