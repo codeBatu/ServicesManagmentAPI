@@ -36,6 +36,7 @@ namespace Repository
                 return new ErrorResult("Aynı isimde servis sistemde kayıtlı.");
             }
             _smartPulseServiceManagerContext!.Add(entity);
+            result.ActiveLife = (result.CreateDateTime - DateTime.Now).ToString();
             var saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
             if (saveResponseCode != 1)
             {
@@ -52,6 +53,7 @@ namespace Repository
                 return new ErrorResult("Geçersiz id");
             }
             _smartPulseServiceManagerContext.Update(entity);
+            result.ActiveLife = (result.CreateDateTime - DateTime.Now).ToString();
             var saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
             if (saveResponseCode != 1)
             {
@@ -89,6 +91,7 @@ namespace Repository
                 return new ErrorResult("Servis zaten aktif!");
 
             result.ServiceStatus = (int)ServiceStatusEnum.Active;
+            result.ActiveLife = (result.CreateDateTime - DateTime.Now).ToString();
             _smartPulseServiceManagerContext.ServiceTables.Update(result);
             int saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
             if (saveResponseCode != 1)
@@ -103,6 +106,7 @@ namespace Repository
             if (result == null) return new ErrorResult("Geçersiz id");
 
             result.ServiceStatus = (int)ServiceStatusEnum.Inactive;
+            result.ActiveLife = (result.CreateDateTime - DateTime.Now).ToString();
             _smartPulseServiceManagerContext.ServiceTables.Update(result);
             int saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
             if (saveResponseCode != 1)
@@ -118,6 +122,7 @@ namespace Repository
 
             result.RestDateTime = DateTime.Now;
             result.RestartCount += 1;
+            result.ActiveLife = (result.CreateDateTime - DateTime.Now).ToString();
             _smartPulseServiceManagerContext?.ServiceTables.Update(result);
             var saveResponseCode = await _smartPulseServiceManagerContext!.SaveChangesAsync();
             if (saveResponseCode != 1)

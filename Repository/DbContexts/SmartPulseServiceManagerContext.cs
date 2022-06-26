@@ -46,17 +46,22 @@ namespace Repository.DbContexts
 
             modelBuilder.Entity<MailTable>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.ToTable("MailTable");
+
+                entity.Property(e => e.Cc)
+                    .HasMaxLength(128)
+                    .HasColumnName("cc");
+
+                entity.Property(e => e.Gmail).HasMaxLength(128);
+
+                entity.Property(e => e.Sender).HasMaxLength(128);
+
+                entity.Property(e => e.Topic).HasMaxLength(128);
 
                 entity.HasOne(d => d.Log)
                     .WithMany(p => p.MailTables)
                     .HasForeignKey(d => d.LogId)
-                    .HasConstraintName("FK__MailTable__LogId__5DCAEF64");
-
-                entity.HasOne(d => d.Services)
-                    .WithMany(p => p.MailTables)
-                    .HasForeignKey(d => d.ServicesId)
-                    .HasConstraintName("FK__MailTable__Servi__5EBF139D");
+                    .HasConstraintName("FK__MailTable__LogId__6754599E");
             });
 
             modelBuilder.Entity<ServiceTable>(entity =>

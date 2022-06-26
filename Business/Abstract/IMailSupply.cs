@@ -10,7 +10,7 @@ namespace Business.Abstract
 {
     public interface IMailSupply
     {
-        IDataResult<MailTable> Get(int id);
-        IDataResult<List<MailTable>> GetAll();
+   
+     Task<IResult> Create(MailTable entity);
     }
 }

@@ -20,14 +20,19 @@ namespace Business.Concrete
             this.mailRepository = mailRepository;
         }
 
-        public IDataResult<MailTable> Get(int id)
+        public async Task<IResult> Create(MailTable entity)
         {
-           return mailRepository.Get(id);
+            var result = await mailRepository.Create(entity);
+            if (!result.Success)
+            {
+                return new ErrorResult(result.Message);
+            }
+
+         
+
+            return new SuccessResult(result.Message);
         }
 
-        public IDataResult<List<MailTable>> GetAll()
-        {
-            return mailRepository.GetAll();
-        }
+     
     }
 }

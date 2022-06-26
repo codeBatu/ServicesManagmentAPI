@@ -1,9 +1,7 @@
 ﻿using Business.Abstract;
-using DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
-using Model.EntityDto;
 using Repository;
 
 namespace ServiceManagerWepApi.Controllers
@@ -12,16 +10,16 @@ namespace ServiceManagerWepApi.Controllers
     [ApiController]
     public class serviceController : ControllerBase
     {
-        private readonly ServiceDto? _serviceManager;
+        private readonly IServiceSupply? _serviceManager;
 
-        public serviceController(ServiceDto? serviceManager)
+        public serviceController(IServiceSupply? serviceManager)
         {
             _serviceManager = serviceManager;
         }
    
      
         [HttpPut("updateService")]
-        public async Task<IActionResult> UpdateService(int id, [FromBody] ServiceTableDtoEntity serviceTable)
+        public async Task<IActionResult> UpdateService(int id, [FromBody] ServiceTable serviceTable)
         {
             var result = await _serviceManager!.Update(id,serviceTable);
             if (!result.Success)

@@ -15,13 +15,12 @@ public class ServiceManager : IServiceSupply
 {
     IServiceManagerRepository _serviceDal;
     ILogRepository _logDal;
-    IMailRepository _mailRepository;
 
     public ServiceManager(IServiceManagerRepository serviceDal, ILogRepository logDal, IMailRepository mailRepository)
     {
         _serviceDal = serviceDal;
         _logDal = logDal;
-        this._mailRepository = mailRepository;
+      
     }
 
     private async Task AddLog(int serviceId, string content,string servisStatus)
@@ -31,13 +30,7 @@ public class ServiceManager : IServiceSupply
         LogTable log = new LogTable { ServiceId = serviceId, Contents = $"Servis {servisStatus} edildi.", CreateDateTime = DateTime.Now, TraceId = guid.ToString() };
         await _logDal.Create(log);
     }
-    private async Task AddMail(int serviceId, string content, string servisStatus)
-    {
-        
-
-        MailTable log = new MailTable { ServicesId = serviceId, Content = $"Servis {servisStatus} edildi.",  };
-        await _mailRepository.Create(log);
-    }
+ 
 
     public async Task<IResult> ActiveService(int id)
     {
@@ -48,7 +41,7 @@ public class ServiceManager : IServiceSupply
         }
 
       await AddLog(id, "Servis  edildi.","active");
-        await AddMail(id, "Servis  edildi.", "active");
+      
         
         return new SuccessResult(result.Message);
     }
@@ -62,7 +55,7 @@ public class ServiceManager : IServiceSupply
         }
 
         await AddLog(entity.Id, "Servis sisteme eklendi.","");
-        await AddMail(entity.Id, "Servis  eklendi.", "sisteme");
+     
         return new SuccessResult(result.Message);
     }
 
@@ -75,7 +68,7 @@ public class ServiceManager : IServiceSupply
         }
 
         await AddLog(id, "Servis sistemden silindi.","");
-        await AddMail(id, "Servis  silindi.", "sisteme");
+    
         return new SuccessResult(result.Message);
     }
 
@@ -103,7 +96,7 @@ public class ServiceManager : IServiceSupply
         }
 
         await AddLog(id, "Servis  edildi.","InActive");
-        await AddMail(id, "Servis  edildi.", "InActive");
+     
 
         return new SuccessResult(result.Message);
     }
@@ -117,7 +110,7 @@ public class ServiceManager : IServiceSupply
         }
 
         await AddLog(id, "Servis  edildi.", "restart");
-        await AddMail(id, "Servis  edildi.", "restart");
+      
         return new SuccessResult(result.Message);
     }
 

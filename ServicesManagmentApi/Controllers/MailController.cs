@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Model;
 
 namespace ServicesManagmentApi.Controllers
 {
@@ -15,26 +16,17 @@ namespace ServicesManagmentApi.Controllers
             this.mailSupply = mailSupply;
         }
 
-        [HttpGet("getAllMail")]
-        public IActionResult GetAllService()
+        [HttpPost("getAllMail")]
+        public IActionResult GetAllService([FromBody] MailTable mailTable)
         {
-            var result = mailSupply!.GetAll();
-            if (!result.Success)
+            var result = mailSupply!.Create(mailTable);
+            if (!result.IsCompletedSuccessfully)
             {
                 return BadRequest(result);
             }
             return Ok(result);
         }
-        [HttpGet("getMailById")]
-        public IActionResult GetLog(int id)
-        {
-            var result = mailSupply!.Get(id);
-            if (!result.Success)
-            {
-                return BadRequest(result);
-            }
-            return Ok(result);
-        }
+      
 
     
 }

@@ -33,15 +33,15 @@ namespace Repository
 
         public IDataResult<MailTable> Get(int serviceId)
         {
-            var log = _smartPulseServiceManagerContext?.MailTables.SingleOrDefault(l => l.ServicesId == serviceId);
+            var log = _smartPulseServiceManagerContext?.LogTables.SingleOrDefault(l => l.ServiceId == serviceId);
             if (log is null) return new ErrorDataResult<MailTable>("Geçersiz id!");
             return new SuccessDataResult<MailTable>(log);
         }
 
         public IDataResult<List<MailTable>> GetAll()
         {
-            var list = _smartPulseServiceManagerContext.MailTables.ToList();
-            return new SuccessDataResult<List<MailTable>>(list);
+       
+          throw new NotImplementedException();
         }
     }
 }
