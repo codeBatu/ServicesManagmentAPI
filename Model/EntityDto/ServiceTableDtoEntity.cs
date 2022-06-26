@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Model.Entity
+namespace Model.EntityDto
 {
-    public  class ServiceTable
+    public  class ServiceTableDtoEntity
     {
-        public ServiceTable()
+        public ServiceTableDtoEntity()
         {
             LogTables = new HashSet<LogTable>();
-            MailTables = new HashSet<MailTable>();
+            MailTables = new HashSet<MailTableDtoEntity>();
         }
 
-        public int Id { get; set; }
+      
         public string? ServiceName { get; set; }
         public DateTime CreateDateTime { get; set; }
         public int? ServiceStatus { get; set; }
@@ -21,6 +21,6 @@ namespace Model.Entity
         public string? Version { get; set; }
 
         public virtual ICollection<LogTable> LogTables { get; set; }
-        public virtual ICollection<MailTable> MailTables { get; set; }
+        public virtual ICollection<MailTableDtoEntity> MailTables { get; set; }
     }
 }

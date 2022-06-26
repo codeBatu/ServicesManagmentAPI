@@ -10,7 +10,7 @@ namespace Model
         public int? LogId { get; set; }
         public int? ServicesId { get; set; }
 
-        public virtual LogTable? Log { get; set; }
-        public virtual ServiceTable? Services { get; set; }
+        public  LogTable? Log { get; set; }
+        public  ServiceTable? Services { get; set; }
     }
 }

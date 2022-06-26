@@ -1,5 +1,5 @@
 ﻿
-namespace Model.Entity
+namespace Model.EntityDto
 {
   public enum ServiceStatusEnum
     {

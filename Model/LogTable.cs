@@ -16,7 +16,7 @@ namespace Model
         public string? Contents { get; set; }
         public DateTime? CreateDateTime { get; set; }
 
-        public virtual ServiceTable? Service { get; set; }
-        public virtual ICollection<MailTable> MailTables { get; set; }
+        public  ServiceTable? Service { get; set; }
+        public  ICollection<MailTable> MailTables { get; set; }
     }
 }

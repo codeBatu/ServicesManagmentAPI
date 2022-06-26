@@ -1,5 +1,5 @@
 ﻿using Business.Abstract;
-using Model.Entity;
+
 using Model.Results;
 using Repository.RepositoryInterface;
 using System;

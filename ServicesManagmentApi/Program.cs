@@ -1,5 +1,6 @@
 using Business.Abstract;
 using Business.Concrete;
+using DTO;
 using Model;
 using Repository;
 using Repository.DbContexts;
@@ -19,8 +20,9 @@ builder.Services.AddSwaggerGen().AddSingleton<SmartPulseServiceManagerContext>()
     .AddScoped<ILogRepository, LogRepository>()
         .AddScoped<ILogSupply, LogManager>()
     .AddScoped<IMailRepository, MailRepository>()
-        .AddScoped<IMailSupply, MailManager>();
-
+        .AddScoped<IMailSupply, MailManager>()
+        .AddScoped<ServiceAutoMapper>().AddScoped<LogAutoMapperProfile>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 
