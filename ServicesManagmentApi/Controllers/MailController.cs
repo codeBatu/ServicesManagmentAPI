@@ -16,7 +16,7 @@ namespace ServicesManagmentApi.Controllers
             this.mailSupply = mailSupply;
         }
 
-        [HttpPost("getAllMail")]
+        [HttpPost("sendMail")]
         public IActionResult GetAllService([FromBody] MailTable mailTable)
         {
             var result = mailSupply!.Create(mailTable);

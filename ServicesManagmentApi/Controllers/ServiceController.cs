@@ -69,8 +69,18 @@ namespace ServiceManagerWepApi.Controllers
             }
             return Ok(result);
         }
-       
-        
+        [HttpPost("createService")]
+        public async Task<IActionResult> CreateService([FromBody] ServiceTable serviceTable )
+        {
+            var result = await _serviceManager!.Create(serviceTable);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
+
         [HttpGet("getAllService")]
         public IActionResult GetAllService()
         {
