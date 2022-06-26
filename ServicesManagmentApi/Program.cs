@@ -14,8 +14,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen().AddSingleton<SmartPulseServiceManagerContext>()
     .AddScoped<IServiceManagerRepository, ServiceManagerRepository>()
+    .AddScoped<IServiceSupply, ServiceManager>()
+
     .AddScoped<ILogRepository, LogRepository>()
-    .AddScoped<IServiceSupply, ServiceManager>().AddScoped<ILogSupply, LogManager>();
+        .AddScoped<ILogSupply, LogManager>()
+    .AddScoped<IMailRepository, MailRepository>()
+        .AddScoped<IMailSupply, MailManager>();
+
 
 var app = builder.Build();
 
