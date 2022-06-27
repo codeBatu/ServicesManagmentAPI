@@ -90,7 +90,7 @@ namespace Repository
 
             _smartPulseServiceManagerContext!.ServiceTable.Remove(result);
             var saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
-            if (saveResponseCode != 1)
+            if (saveResponseCode < 1)
             {
                 return new ErrorResult("Servis silinemedi!");
             }
@@ -109,7 +109,7 @@ namespace Repository
             result.ServiceStatus = (int)ServiceStatusEnum.Active;
             _smartPulseServiceManagerContext.ServiceTable.Update(result);
             int saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
-            if (saveResponseCode != 1)
+            if (saveResponseCode < 1)
             {
                 return new ErrorResult("Servis aktive edilemedi!");
             }
@@ -126,7 +126,7 @@ namespace Repository
             result.ServiceStatus = (int)ServiceStatusEnum.Inactive;
             _smartPulseServiceManagerContext.ServiceTable.Update(result);
             int saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
-            if (saveResponseCode != 1)
+            if (saveResponseCode < 1)
             {
                 return new ErrorResult("Servis deaktive edilemedi!");
             }
@@ -172,6 +172,10 @@ namespace Repository
         public IDataResult<List<ServiceTable>> GetAll()
         {
             var list = _smartPulseServiceManagerContext!.ServiceTable.Include(s => s.LogTables).ToList();
+            foreach (var service in list)
+            {
+                service.ActiveLife = (DateTime.Now - service.CreateDateTime).ToString();
+            }
             return new SuccessDataResult<List<ServiceTable>>(list);
         }
     }
