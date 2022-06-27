@@ -3,7 +3,7 @@ namespace Model
 {
   public enum ServiceStatusEnum
     {
-        Active= 1,
-        Inactive=0,
+        Active= 0,
+        Inactive=1,
     }
 }

@@ -22,7 +22,6 @@ namespace Repository
 
         public async Task<IResult> Create(LogTable entity)
         {
-            entity.CreateDateTime = DateTime.Now;
             _smartPulseServiceManagerContext!.Add(entity);
             var saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
             if (saveResponseCode != 1)
@@ -33,12 +32,9 @@ namespace Repository
             return new SuccessResult("Log başarıyla kaydedildi.");
         }
 
-        public IDataResult<LogTable> Get(int logId)
+        public IDataResult<LogTable> Get(int serviceId)
         {
-
-            var log = _smartPulseServiceManagerContext?.LogTable.SingleOrDefault(l => l.Id == logId);
-
-         
+            var log = _smartPulseServiceManagerContext?.LogTables.SingleOrDefault(l => l.ServiceId == serviceId);
             if (log is null) return new ErrorDataResult<LogTable>("Geçersiz id!");
             return new SuccessDataResult<LogTable>(log);
         }

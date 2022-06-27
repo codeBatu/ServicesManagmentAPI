@@ -1,14 +1,13 @@
 ﻿using Business.Abstract;
 using Model;
 using Model.Results;
-
+using Repository;
 using Repository.RepositoryInterface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 
 namespace Business.Concrete
 {
@@ -36,5 +35,4 @@ namespace Business.Concrete
 
      
     }
-
 }
