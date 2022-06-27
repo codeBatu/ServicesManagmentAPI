@@ -19,6 +19,9 @@ namespace Repository.DbContexts
 
         public virtual DbSet<LogTable> LogTable { get; set; } = null!;
         public virtual DbSet<ServiceTable> ServiceTable { get; set; } = null!;
+        public virtual DbSet<MailTable> MailTables { get; set; } = null!;
+
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -58,6 +61,26 @@ namespace Repository.DbContexts
                 entity.Property(e => e.Version)
                     .HasMaxLength(16)
                     .IsFixedLength();
+            });
+
+            modelBuilder.Entity<MailTable>(entity =>
+            {
+                entity.ToTable("MailTable");
+
+                entity.Property(e => e.Cc)
+                    .HasMaxLength(128)
+                    .HasColumnName("cc");
+
+                entity.Property(e => e.Gmail).HasMaxLength(128);
+
+                entity.Property(e => e.Sender).HasMaxLength(128);
+
+                entity.Property(e => e.Topic).HasMaxLength(128);
+
+                entity.HasOne(d => d.Log)
+                    .WithMany(p => p.MailTables)
+                    .HasForeignKey(d => d.LogId)
+                    .HasConstraintName("FK__MailTable__LogId__6754599E");
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -15,5 +15,6 @@ namespace Model
         public DateTime? CreateDateTime { get; set; } = DateTime.Now;
 
         public virtual ServiceTable? Service { get; set; }
+        public ICollection<MailTable>? MailTables { get; set; }
     }
 }
