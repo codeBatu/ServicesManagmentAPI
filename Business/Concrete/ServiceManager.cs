@@ -24,7 +24,7 @@ public class ServiceManager : IServiceSupply
     private async Task AddLog(int serviceId, string content)
     {
         Guid guid = Guid.NewGuid();
-        LogTable log = new() { ServiceId = serviceId, Contents = content, CreateDateTime = DateTime.Now, TraceId = guid.ToString() };
+        LogTable log = new() { ServiceId = serviceId, Contents = content, TraceId = guid.ToString() };
         await _logDal.Create(log);
     }
 
