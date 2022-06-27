@@ -30,14 +30,17 @@ namespace Repository
         /// <returns>ServiceMassageModel Döner</returns>
         public async Task<IResult> Create(ServiceTable entity)
         {
-            var result = _smartPulseServiceManagerContext!.ServiceTable.FirstOrDefault(t => t.ServiceName == entity.ServiceName);
-            if (result is not null)
+            // isme göre servis bilgisi getir
+            var result = GetService(entity.ServiceName);
+            // eğer aynı isimde bir servis varsa error result dön
+            if (result.Success)
             {
                 return new ErrorResult("Aynı isimde servis sistemde kayıtlı.");
             }
+
             _smartPulseServiceManagerContext!.Add(entity);
             var saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
-            if (saveResponseCode != 1)
+            if (saveResponseCode < 1)
             {
                 return new ErrorResult("Servis kaydedilemedi!");
 
@@ -46,24 +49,37 @@ namespace Repository
         }
         public async Task<IResult> Update(int id, ServiceTable entity)
         {
-            var result = _smartPulseServiceManagerContext!.ServiceTable.FirstOrDefault(t => t.Id == id);
-            if (result is null)
+            var service = _smartPulseServiceManagerContext!.ServiceTable.FirstOrDefault(t => t.Id == id);
+            if (service is null)
             {
                 return new ErrorResult("Geçersiz id");
             }
-            _smartPulseServiceManagerContext.Update(entity);
+
+            // güncellenen isimde başka bir servis sistemde kayıtlı mı diye kontrol et
+            var result = GetService(entity.ServiceName);
+            if (result.Success && service.Id != result.Data.Id)
+            {
+                return new ErrorResult("Aynı isimde servis sistemde kayıtlı.");
+            }
+
+            service.ServiceName = entity.ServiceName;
+            service.Version = entity.Version;
+
+            _smartPulseServiceManagerContext.Update(service);
             var saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
-            if (saveResponseCode != 1)
+            if (saveResponseCode < 1)
             {
                 return new ErrorResult("Servis güncellenemedi!");
 
             }
             return new SuccessResult("Servis başarıyla güncellendi.");
-        }   /// <summary>
-            /// Id göre servisi tablosundaki veriyi siler
-            /// </summary>
-            /// <param name="id"></param>
-            /// <returns></returns>
+        }
+
+        /// <summary>
+        /// Id göre servisi tablosundaki veriyi siler
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IResult> Delete(int id)
         {
             var result = _smartPulseServiceManagerContext!.ServiceTable.FirstOrDefault(t => t.Id == id);
@@ -71,6 +87,8 @@ namespace Repository
             {
                 return new ErrorResult("Geçersiz id");
             }
+
+            _smartPulseServiceManagerContext!.ServiceTable.Remove(result);
             var saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
             if (saveResponseCode != 1)
             {
@@ -85,7 +103,7 @@ namespace Repository
             var result = _smartPulseServiceManagerContext!.ServiceTable.FirstOrDefault(t => t.Id == id);
             if (result == null) return new ErrorResult("Geçersiz id");
 
-            if(result.ServiceStatus == (int)ServiceStatusEnum.Active)
+            if (result.ServiceStatus == (int)ServiceStatusEnum.Active)
                 return new ErrorResult("Servis zaten aktif!");
 
             result.ServiceStatus = (int)ServiceStatusEnum.Active;
@@ -101,6 +119,9 @@ namespace Repository
         {
             var result = _smartPulseServiceManagerContext!.ServiceTable.FirstOrDefault(t => t.Id == id);
             if (result == null) return new ErrorResult("Geçersiz id");
+
+            if (result.ServiceStatus == (int)ServiceStatusEnum.Inactive)
+                return new ErrorResult("Servis zaten inaktif!");
 
             result.ServiceStatus = (int)ServiceStatusEnum.Inactive;
             _smartPulseServiceManagerContext.ServiceTable.Update(result);
@@ -120,9 +141,8 @@ namespace Repository
             result.RestartCount += 1;
             _smartPulseServiceManagerContext?.ServiceTable.Update(result);
             var saveResponseCode = await _smartPulseServiceManagerContext!.SaveChangesAsync();
-            if (saveResponseCode != 1)
+            if (saveResponseCode < 1)
             {
-
                 return new ErrorResult("Servis restart edilemedi!");
             }
             return new SuccessResult("Servis başarıyla restart edildi.");
@@ -133,14 +153,14 @@ namespace Repository
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public IDataResult<ServiceTable> GetService(ServiceTable entity)
+        public IDataResult<ServiceTable> GetService(string name)
         {
-            var result = _smartPulseServiceManagerContext?.ServiceTable.Include(s => s.LogTables).SingleOrDefault(t => t.ServiceName == entity.ServiceName);
+            var result = _smartPulseServiceManagerContext?.ServiceTable.Include(s => s.LogTables).SingleOrDefault(t => t.ServiceName == name);
             if (result is null) return new ErrorDataResult<ServiceTable>("Bu isimde bir servis bulunamadı!");
             result.ActiveLife = (DateTime.Now - result.CreateDateTime).ToString();
             return new SuccessDataResult<ServiceTable>(result);
         }
-        
+
         public IDataResult<ServiceTable> Get(int id)
         {
             var service = _smartPulseServiceManagerContext?.ServiceTable.Include(s => s.LogTables).SingleOrDefault(s => s.Id == id);
@@ -151,7 +171,7 @@ namespace Repository
 
         public IDataResult<List<ServiceTable>> GetAll()
         {
-            var list = _smartPulseServiceManagerContext.ServiceTable.Include(s => s.LogTables).ToList();
+            var list = _smartPulseServiceManagerContext!.ServiceTable.Include(s => s.LogTables).ToList();
             return new SuccessDataResult<List<ServiceTable>>(list);
         }
     }

@@ -25,7 +25,7 @@ namespace Repository.DbContexts
             if (!optionsBuilder.IsConfigured)
             {
 
-                optionsBuilder.UseSqlServer("Data Source=BURAKPC;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+                optionsBuilder.UseSqlServer("Data Source=BURAKPC;Initial Catalog=SmartPulseServiceManagerDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
             }
         }
 
@@ -35,7 +35,7 @@ namespace Repository.DbContexts
             {
                 entity.ToTable("LogTable");
 
-                entity.Property(e => e.CreateDateTime).HasColumnType("date");
+                entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Service)
                     .WithMany(p => p.LogTables)

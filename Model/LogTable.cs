@@ -1,15 +1,19 @@
 ﻿
 
-namespace Model { 
+using System.ComponentModel.DataAnnotations.Schema;
 
-public partial class LogTable
+namespace Model
 {
-    public int Id { get; set; }
-    public int? ServiceId { get; set; }
-    public string TraceId { get; set; }
-    public string? Contents { get; set; }
-    public DateTime? CreateDateTime { get; set; } = DateTime.Now;
 
-    public virtual ServiceTable? Service { get; set; }
-}
+    public partial class LogTable
+    {
+        public int Id { get; set; }
+        [ForeignKey(nameof(ServiceId))]
+        public int ServiceId { get; set; }
+        public string? TraceId { get; set; }
+        public string? Contents { get; set; }
+        public DateTime? CreateDateTime { get; set; } = DateTime.Now;
+
+        public virtual ServiceTable? Service { get; set; }
+    }
 }

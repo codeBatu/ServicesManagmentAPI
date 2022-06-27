@@ -24,7 +24,7 @@ public class ServiceManager : IServiceSupply
     private async Task AddLog(int serviceId, string content)
     {
         Guid guid = Guid.NewGuid();
-        LogTable log = new LogTable { ServiceId = serviceId, Contents = "Servis aktive edildi.", CreateDateTime = DateTime.Now, TraceId = guid.ToString() };
+        LogTable log = new() { ServiceId = serviceId, Contents = content, CreateDateTime = DateTime.Now, TraceId = guid.ToString() };
         await _logDal.Create(log);
     }
 
@@ -42,6 +42,9 @@ public class ServiceManager : IServiceSupply
 
     public async Task<IResult> Create(ServiceTable entity)
     {
+        entity.CreateDateTime = DateTime.Now;
+        entity.RestartCount = 0;
+
         var result = await _serviceDal.Create(entity);
         if (!result.Success)
         {
@@ -60,7 +63,6 @@ public class ServiceManager : IServiceSupply
             return new ErrorResult(result.Message);
         }
 
-        await AddLog(id, "Servis sistemden silindi.");
         return new SuccessResult(result.Message);
     }
 
@@ -74,9 +76,9 @@ public class ServiceManager : IServiceSupply
         return _serviceDal.GetAll();
     }
 
-    public IDataResult<ServiceTable> GetService(ServiceTable entity)
+    public IDataResult<ServiceTable> GetService(string name)
     {
-        return _serviceDal.GetService(entity);
+        return _serviceDal.GetService(name);
     }
 
     public async Task<IResult> InActiveService(int id)
@@ -103,8 +105,14 @@ public class ServiceManager : IServiceSupply
         return new SuccessResult(result.Message);
     }
 
-    public Task<IResult> Update(int id, ServiceTable entity)
+    public async Task<IResult> Update(int id, ServiceTable entity)
     {
-        throw new NotImplementedException();
+        var result = await _serviceDal.Update(id, entity);
+        if(!result.Success)
+        {
+            return new ErrorResult(result.Message);
+        }
+        await AddLog(id, "Servis bilgileri güncellendi.");
+        return new SuccessResult(result.Message);
     }
 }
