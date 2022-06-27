@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 
+
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Model
 {
+
     public partial class LogTable
     {
-        public LogTable()
-        {
-            MailTables = new HashSet<MailTable>();
-        }
-
         public int Id { get; set; }
-        public int? ServiceId { get; set; }
-        public string TraceId { get; set; } = null!;
+        [ForeignKey(nameof(ServiceId))]
+        public int ServiceId { get; set; }
+        public string? TraceId { get; set; }
         public string? Contents { get; set; }
-        public DateTime? CreateDateTime { get; set; }
+        public DateTime? CreateDateTime { get; set; } = DateTime.Now;
 
-        public  ServiceTable? Service { get; set; }
-        public  ICollection<MailTable> MailTables { get; set; }
+        public virtual ServiceTable? Service { get; set; }
+        public ICollection<MailTable>? MailTables { get; set; }
     }
 }
+

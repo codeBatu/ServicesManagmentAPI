@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
 using Model;
 using Repository;
 
@@ -38,6 +39,7 @@ namespace ServiceManagerWepApi.Controllers
             }
             return Ok(result);
         }
+
 
     }
 }

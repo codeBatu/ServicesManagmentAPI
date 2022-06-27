@@ -13,7 +13,7 @@ namespace Model
 
         public int Id { get; set; }
         public string? ServiceName { get; set; }
-        public DateTime CreateDateTime { get; set; }
+        public DateTime? CreateDateTime { get; set; }
         public int? ServiceStatus { get; set; }
         public string? ActiveLife { get; set; }
         public DateTime? RestDateTime { get; set; }

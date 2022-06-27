@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
+using Model.DTOs;
 using Repository;
 
 namespace ServiceManagerWepApi.Controllers
@@ -16,12 +17,36 @@ namespace ServiceManagerWepApi.Controllers
         {
             _serviceManager = serviceManager;
         }
+
+
+        [HttpPost("createService")]
+        public async Task<IActionResult> CreateService([FromBody] CreateServiceDTO createService)
+        {
+            // map dto to serviceTable entity
+            var service = new ServiceTable
+            {
+                ServiceName = createService.ServiceName,
+                ServiceStatus = createService.ServiceStatus,
+                Version = createService.Version
+            };
+
+            var result = await _serviceManager!.Create(service);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
    
      
+
         [HttpPut("updateService")]
-        public async Task<IActionResult> UpdateService(int id, [FromBody] ServiceTable serviceTable)
+        public async Task<IActionResult> UpdateService(int id, [FromBody] UpdateServiceDTO updateService)
         {
-            var result = await _serviceManager!.Update(id,serviceTable);
+            var service = new ServiceTable{ ServiceName = updateService.ServiceName, Version = updateService.Version };
+
+            var result = await _serviceManager!.Update(id, service);
             if (!result.Success)
             {
                 return BadRequest(result);
@@ -69,10 +94,13 @@ namespace ServiceManagerWepApi.Controllers
             }
             return Ok(result);
         }
-        [HttpPost("createService")]
-        public async Task<IActionResult> CreateService([FromBody] ServiceTable serviceTable )
+
+
+        [HttpGet("getAllServices")]
+
+        public IActionResult GetAllService()
         {
-            var result = await _serviceManager!.Create(serviceTable);
+            var result = _serviceManager!.GetAll();
             if (!result.Success)
             {
                 return BadRequest(result);
@@ -80,11 +108,21 @@ namespace ServiceManagerWepApi.Controllers
             return Ok(result);
         }
 
-
-        [HttpGet("getAllService")]
-        public IActionResult GetAllService()
+        [HttpGet("GetServiceById")]
+        public IActionResult GetById(int id)
         {
-            var result = _serviceManager!.GetAll();
+            var result = _serviceManager!.Get(id);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        
+        [HttpGet("GetServiceByName")]
+        public IActionResult GetByName(string name)
+        {
+            var result = _serviceManager!.GetService(name);
             if (!result.Success)
             {
                 return BadRequest(result);

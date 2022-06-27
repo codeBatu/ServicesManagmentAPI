@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Business.Concrete
 {
     public class LogManager  :ILogSupply
@@ -29,5 +30,6 @@ namespace Business.Concrete
            
            return _logDal.GetAll();
         }
+
     }
 }

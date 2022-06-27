@@ -5,12 +5,28 @@ using Model;
 using Repository;
 using Repository.DbContexts;
 using Repository.RepositoryInterface;
+using System.Text.Json.Serialization;
+
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:3000")
+                                                  .AllowAnyHeader()
+                                                  .AllowAnyMethod();
+                      });
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen().AddSingleton<SmartPulseServiceManagerContext>()
@@ -18,11 +34,12 @@ builder.Services.AddSwaggerGen().AddSingleton<SmartPulseServiceManagerContext>()
     .AddScoped<IServiceSupply, ServiceManager>()
 
     .AddScoped<ILogRepository, LogRepository>()
-        .AddScoped<ILogSupply, LogManager>()
+
+    .AddScoped<IServiceSupply, ServiceManager>().AddScoped<ILogRepository, LogRepository>()
+    .AddScoped<ILogSupply, LogManager>()
     .AddScoped<IMailRepository, MailRepository>()
-        .AddScoped<IMailSupply, MailManager>()
-        .AddScoped<ServiceAutoMapper>().AddScoped<LogAutoMapperProfile>();
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+    .AddScoped<IMailSupply, MailManager>();
+
 
 var app = builder.Build();
 
@@ -34,6 +51,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthorization();
 
