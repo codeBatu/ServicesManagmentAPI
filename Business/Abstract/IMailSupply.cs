@@ -6,9 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.Abstract;
 
-public interface IMailSupply
+namespace Business.Abstract
 {
-    Task<IResult> Create(MailTable entity);
+    public interface IMailSupply
+    {
+   
+     Task<IResult> Create(MailTable entity);
+    }
+
 }

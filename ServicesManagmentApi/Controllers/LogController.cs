@@ -2,38 +2,44 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ServicesManagmentApi.Controllers;
+using Model;
+using Repository;
 
-[Route("api/[controller]")]
-[ApiController]
-public class LogController : ControllerBase
+namespace ServiceManagerWepApi.Controllers
 {
-    private readonly ILogSupply? logSupply;
-
-    public LogController(ILogSupply? logSupply)
+    [Route("[controller]")]
+    [ApiController]
+    public class LogController : ControllerBase
     {
-        this.logSupply = logSupply;
-    }
+        private readonly ILogSupply? logSupply;
 
-
-    [HttpGet("getAllLog")]
-    public IActionResult GetAllService()
-    {
-        var result = logSupply!.GetAll();
-        if (!result.Success)
+        public LogController(ILogSupply? logSupply)
         {
-            return BadRequest(result);
+           this. logSupply = logSupply;
         }
-        return Ok(result);
-    }
-    [HttpGet("getLogById")]
-    public IActionResult GetLog(int id)
-    {
-        var result = logSupply!.Get(id);
-        if (!result.Success)
+      
+        
+        [HttpGet("getAllLog")]
+        public IActionResult GetAllService()
         {
-            return BadRequest(result);
+            var result = logSupply!.GetAll();
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
-        return Ok(result);
+        [HttpGet("getLogById")]
+        public IActionResult GetLog(int id)
+        {
+            var result = logSupply!.Get(id);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
+
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Business.Abstract;
-using Model;
+
 using Model.Results;
 using Repository.RepositoryInterface;
 using System;
@@ -8,25 +8,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.Concrete;
 
-public class LogManager : ILogSupply
+namespace Business.Concrete
 {
-    ILogRepository _logDal;
-
-    public LogManager(ILogRepository logDal)
+    public class LogManager  :ILogSupply
     {
-        _logDal = logDal;
-    }
+        ILogRepository _logDal;
 
-    public IDataResult<LogTable> Get(int id)
-    {
-        return _logDal.Get(id);
-    }
+        public LogManager(ILogRepository logDal)
+        {
+            _logDal = logDal;
+        }
 
-    public IDataResult<List<LogTable>> GetAll()
-    {
+        public IDataResult<Model.LogTable> Get(int id)
+        {
+           return _logDal.Get(id);
+        }
 
-        return _logDal.GetAll();
+        public IDataResult<List<Model.LogTable>> GetAll()
+        {
+           
+           return _logDal.GetAll();
+        }
+
     }
 }

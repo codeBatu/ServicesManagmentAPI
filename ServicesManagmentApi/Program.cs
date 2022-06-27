@@ -1,5 +1,6 @@
 using Business.Abstract;
 using Business.Concrete;
+using DTO;
 using Model;
 using Repository;
 using Repository.DbContexts;
@@ -30,11 +31,15 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen().AddSingleton<SmartPulseServiceManagerContext>()
     .AddScoped<IServiceManagerRepository, ServiceManagerRepository>()
+    .AddScoped<IServiceSupply, ServiceManager>()
+
     .AddScoped<ILogRepository, LogRepository>()
+
     .AddScoped<IServiceSupply, ServiceManager>().AddScoped<ILogRepository, LogRepository>()
     .AddScoped<ILogSupply, LogManager>()
     .AddScoped<IMailRepository, MailRepository>()
     .AddScoped<IMailSupply, MailManager>();
+
 
 var app = builder.Build();
 

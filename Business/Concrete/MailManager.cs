@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Model;
 using Model.Results;
+
 using Repository.RepositoryInterface;
 using System;
 using System.Collections.Generic;
@@ -8,29 +9,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.Concrete;
 
-public class MailManager : IMailSupply
+namespace Business.Concrete
 {
-    IMailRepository mailRepository;
-
-    public MailManager(IMailRepository mailRepository)
+    public class MailManager : IMailSupply
     {
-        this.mailRepository = mailRepository;
-    }
+        IMailRepository mailRepository;
 
-    public async Task<IResult> Create(MailTable entity)
-    {
-        var result = await mailRepository.Create(entity);
-        if (!result.Success)
+        public MailManager(IMailRepository mailRepository)
         {
-            return new ErrorResult(result.Message);
+            this.mailRepository = mailRepository;
         }
 
+        public async Task<IResult> Create(MailTable entity)
+        {
+            var result = await mailRepository.Create(entity);
+            if (!result.Success)
+            {
+                return new ErrorResult(result.Message);
+            }
 
+         
 
-        return new SuccessResult(result.Message);
+            return new SuccessResult(result.Message);
+        }
+
+     
     }
-
 
 }

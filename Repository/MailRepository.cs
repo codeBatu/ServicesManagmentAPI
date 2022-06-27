@@ -8,37 +8,42 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repository;
 
-public class MailRepository : IMailRepository
+namespace Repository
 {
-    private readonly SmartPulseServiceManagerContext _smartPulseServiceManagerContext;
-
-    public MailRepository(SmartPulseServiceManagerContext smartPulseServiceManagerContext)
+    public class MailRepository : IMailRepository
     {
-        _smartPulseServiceManagerContext = smartPulseServiceManagerContext;
-    }
+        private readonly SmartPulseServiceManagerContext _smartPulseServiceManagerContext;
 
-    public async Task<IResult> Create(MailTable entity)
-    {
-        _smartPulseServiceManagerContext!.Add(entity);
-        var saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
-        if (saveResponseCode != 1)
+        public MailRepository(SmartPulseServiceManagerContext smartPulseServiceManagerContext)
         {
-            return new ErrorResult("Mail kaydedilemedi!");
-
+            _smartPulseServiceManagerContext = smartPulseServiceManagerContext;
         }
-        return new SuccessResult("Mail başarıyla kaydedildi.");
-    }
 
-    public IDataResult<MailTable> Get(int serviceId)
-    {
-        throw new NotImplementedException();
-    }
+        public async Task<IResult> Create(MailTable entity)
+        {
+            _smartPulseServiceManagerContext!.Add(entity);
+            var saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
+            if (saveResponseCode != 1)
+            {
+                return new ErrorResult("Mail kaydedilemedi!");
 
-    public IDataResult<List<MailTable>> GetAll()
-    {
+            }
+            return new SuccessResult("Mail başarıyla kaydedildi.");
+        }
 
-        throw new NotImplementedException();
+        public IDataResult<MailTable> Get(int serviceId)
+        {
+            var log = _smartPulseServiceManagerContext?.LogTables.SingleOrDefault(l => l.ServiceId == serviceId);
+            if (log is null) return new ErrorDataResult<MailTable>("Geçersiz id!");
+            return new SuccessDataResult<MailTable>(log);
+        }
+
+        public IDataResult<List<MailTable>> GetAll()
+        {
+       
+          throw new NotImplementedException();
+        }
+
     }
 }

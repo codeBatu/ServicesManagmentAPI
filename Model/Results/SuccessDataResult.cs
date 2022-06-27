@@ -23,7 +23,7 @@ public class SuccessDataResult<T> : DataResult<T>
 
     }
 
-    public SuccessDataResult() : base(default, true)
+    public SuccessDataResult(LogTable log) : base(default, true)
     {
 
     }

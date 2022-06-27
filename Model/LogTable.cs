@@ -1,4 +1,6 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+
 
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,3 +20,4 @@ namespace Model
         public ICollection<MailTable>? MailTables { get; set; }
     }
 }
+
