@@ -22,5 +22,5 @@ public interface IServiceSupply
     Task<IResult> ActiveService(int id);
     Task<IResult> InActiveService(int id);
 
-    IDataResult<ServiceTable> GetService(string name);
+    IDataResult<ServiceTable> GetService(ServiceTable entity);
 }
