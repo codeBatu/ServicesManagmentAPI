@@ -34,7 +34,11 @@ builder.Services.AddSwaggerGen().AddSingleton<SmartPulseServiceManagerContext>()
     .AddScoped<IServiceSupply, ServiceManager>().AddScoped<ILogRepository, LogRepository>()
     .AddScoped<ILogSupply, LogManager>()
     .AddScoped<IMailRepository, MailRepository>()
-    .AddScoped<IMailSupply, MailManager>();
+    .AddScoped<IMailSupply, MailManager>()
+    .AddScoped<IEmailService, EmailManager>();
+
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+
 
 var app = builder.Build();
 

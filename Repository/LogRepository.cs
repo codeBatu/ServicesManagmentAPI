@@ -21,7 +21,6 @@ namespace Repository
 
         public async Task<IResult> Create(LogTable entity)
         {
-            entity.CreateDateTime = DateTime.Now;
             _smartPulseServiceManagerContext!.Add(entity);
             var saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
             if (saveResponseCode != 1)

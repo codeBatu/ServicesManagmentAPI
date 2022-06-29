@@ -12,4 +12,5 @@ public interface ILogSupply
 {
     IDataResult<LogTable> Get(int id);
     IDataResult<List<LogTable>> GetAll();
+    Task<IResult> Create(LogTable entity);
 }
