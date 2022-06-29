@@ -10,5 +10,5 @@ public interface IAccountRepository : IGenericRepository<Account, int>
     Account GetByMail(string email);
     bool CheckIfEmailExists(string email);
     bool IsFirstAccount();
-    bool IsEmailRegistered(string email)
+    bool IsEmailRegistered(string email);
 }

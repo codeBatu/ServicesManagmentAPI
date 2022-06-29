@@ -11,8 +11,8 @@ public class CreateRequest
     public string LastName { get; set; }
 
     [Required]
-    [EnumDataType(typeof(RoleEnum))]
-    public string RoleEnum { get; set; }
+    [EnumDataType(typeof(Role))]
+    public string Role { get; set; }
 
     [Required]
     [EmailAddress]

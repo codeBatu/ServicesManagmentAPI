@@ -8,11 +8,11 @@ using Model;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class AuthorizeAttribute : Attribute, IAuthorizationFilter
 {
-    private readonly IList<RoleEnum> _roles;
+    private readonly IList<Role> _roles;
 
-    public AuthorizeAttribute(params RoleEnum[] roles)
+    public AuthorizeAttribute(params Role[] roles)
     {
-        _roles = roles ?? new RoleEnum[] { };
+        _roles = roles ?? new Role[] { };
     }
 
     public void OnAuthorization(AuthorizationFilterContext context)
@@ -24,17 +24,11 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
 
         // authorization
         var account = (Account)context.HttpContext.Items["Account"];
-
-        var hasAuthority = false;
-        foreach(Role r in account.Roles)
-        {
-            if(_roles.Contains(r.RoleValue)) hasAuthority = true;
-        }
-
-        if (account == null || (_roles.Any() && !hasAuthority))
+        if (account == null || (_roles.Any() && !_roles.Contains(account.Role)))
         {
             // not logged in or role not authorized
             context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
         }
     }
 }
+

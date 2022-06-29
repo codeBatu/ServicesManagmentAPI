@@ -16,20 +16,18 @@ public class AccountManager : IAccountSupply
     private readonly IJwtUtils _jwtUtils;
     private readonly IMapper _mapper;
     private readonly AppSettings _appSettings;
-    private readonly IRoleRepository _roleDal;
 
     public AccountManager(
         IAccountRepository accountDal,
         IJwtUtils jwtUtils,
         IMapper mapper,
-        IOptions<AppSettings> appSettings,
-        IRoleRepository roleDal)
+        IOptions<AppSettings> appSettings
+        )
     {
         _accountDal = accountDal;
         _jwtUtils = jwtUtils;
         _mapper = mapper;
         _appSettings = appSettings.Value;
-        _roleDal = roleDal;
     }
 
     public IDataResult<AuthenticateResponse> Authenticate(AuthenticateRequest model)
@@ -65,13 +63,8 @@ public class AccountManager : IAccountSupply
         // hash password
         account.PasswordHash = BCrypt.HashPassword(model.Password);
 
-        // convert string to enum
-        RoleEnum role;
-        Enum.TryParse(model.RoleEnum, out role);
-
         // save account
         await _accountDal.Create(account);
-        await addRole(account.Id, role);
 
         var response = _mapper.Map<AccountResponse>(account);
         return new SuccessDataResult<AccountResponse>(response);
@@ -102,21 +95,17 @@ public class AccountManager : IAccountSupply
 
         // map model to new account object
         var account = _mapper.Map<Account>(model);
+
+        // first registered account is an admin
+        var isFirstAccount = _accountDal.IsFirstAccount();
+        account.Role = isFirstAccount ? Role.Admin : Role.User;
         account.Created = DateTime.UtcNow;
 
         // hash password
         account.PasswordHash = BCrypt.HashPassword(model.Password);
 
-        // first registered account is an admin
-        var isFirstAccount = _accountDal.IsFirstAccount();
-
         // save to db
         var result = await _accountDal.Create(account);
-
-        if (isFirstAccount)
-        {
-            await addRole(account.Id, RoleEnum.Admin);
-        }
 
         return result;
     }
@@ -124,10 +113,5 @@ public class AccountManager : IAccountSupply
     public AccountResponse Update(int id, UpdateRequest model)
     {
         throw new NotImplementedException();
-    }
-
-    private async Task addRole(int accountId, RoleEnum role)
-    {
-        await _roleDal.Create(new() { AccountId = accountId, RoleValue = role });
     }
 }

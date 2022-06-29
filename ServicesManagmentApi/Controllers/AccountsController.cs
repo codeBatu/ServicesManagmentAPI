@@ -42,8 +42,8 @@ public class AccountsController : BaseController
         return Ok(result.Data);
     }
 
-    [Authorize(RoleEnum.Admin)]
-    [HttpPost]
+    [Authorize(Role.Admin)]
+    [HttpPost("create")]
     public async Task<ActionResult<AccountResponse>> Create(CreateRequest model)
     {
         var result = await _accountManager.Create(model);

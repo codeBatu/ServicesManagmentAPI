@@ -7,7 +7,6 @@ using Repository.DbContexts;
 using Repository.RepositoryInterface;
 using System.Text.Json.Serialization;
 using Business.Helpers.Authorization;
-using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,8 +52,6 @@ var builder = WebApplication.CreateBuilder(args);
 
     services.AddScoped<IAccountRepository, AccountRepository>();
     services.AddScoped<IAccountSupply, AccountManager>();
-    
-    services.AddScoped<IRoleRepository, RoleRepository>();
 }
 
 var app = builder.Build();
