@@ -29,4 +29,11 @@ public class LogManager : ILogSupply
 
         return _logDal.GetAll();
     }
+
+    public async Task<IResult> Create(LogTable entity)
+    {
+        entity.CreateDateTime = DateTime.Now;
+        var result = await _logDal.Create(entity);
+        return result;
+    }
 }

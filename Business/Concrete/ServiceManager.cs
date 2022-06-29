@@ -13,19 +13,19 @@ namespace Business.Concrete;
 public class ServiceManager : IServiceSupply
 {
     IServiceManagerRepository _serviceDal;
-    ILogRepository _logDal;
+    ILogSupply _logSupply;
 
-    public ServiceManager(IServiceManagerRepository serviceDal, ILogRepository logDal)
+    public ServiceManager(IServiceManagerRepository serviceDal, ILogSupply logSupply)
     {
         _serviceDal = serviceDal;
-        _logDal = logDal;
+        _logSupply = logSupply;
     }
 
     private async Task AddLog(int serviceId, string content)
     {
         Guid guid = Guid.NewGuid();
         LogTable log = new() { ServiceId = serviceId, Contents = content, TraceId = guid.ToString() };
-        await _logDal.Create(log);
+        await _logSupply.Create(log);
     }
 
     public async Task<IResult> ActiveService(int id)
