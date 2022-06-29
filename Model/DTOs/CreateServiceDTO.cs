@@ -9,6 +9,6 @@ namespace Model.DTOs;
 public class CreateServiceDTO
 {
     public string? ServiceName { get; set; }
-    public int? ServiceStatus { get; set; }
+    public ServiceStatusEnum? ServiceStatus { get; set; }
     public string? Version { get; set; }
 }
