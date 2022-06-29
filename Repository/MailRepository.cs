@@ -21,7 +21,7 @@ public class MailRepository : IMailRepository
 
     public async Task<IResult> Create(MailTable entity)
     {
-        _smartPulseServiceManagerContext!.Add(entity);
+        _smartPulseServiceManagerContext.MailTables.Add(entity);
         var saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
         if (saveResponseCode != 1)
         {

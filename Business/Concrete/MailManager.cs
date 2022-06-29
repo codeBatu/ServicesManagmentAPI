@@ -21,15 +21,8 @@ public class MailManager : IMailSupply
 
     public async Task<IResult> Create(MailTable entity)
     {
-        var result = await mailRepository.Create(entity);
-        if (!result.Success)
-        {
-            return new ErrorResult(result.Message);
-        }
-
-
-
-        return new SuccessResult(result.Message);
+        return await mailRepository.Create(entity);
+        
     }
 
 
