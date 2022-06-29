@@ -20,6 +20,9 @@ namespace Repository.DbContexts
         public virtual DbSet<LogTable> LogTable { get; set; } = null!;
         public virtual DbSet<ServiceTable> ServiceTable { get; set; } = null!;
         public virtual DbSet<MailTable> MailTables { get; set; } = null!;
+        public virtual DbSet<Account> Accounts { get; set; } = null!;
+        public virtual DbSet<Role> Roles { get; set; } = null!;
+        public virtual DbSet<UserGroup> UserGroups { get; set; } = null!;
 
 
 
