@@ -23,7 +23,7 @@ public class AccountsController : BaseController
     public async Task<IActionResult> Register(RegisterRequest model)
     {
         var result = await _accountManager.Register(model);
-        if(!result.Success)
+        if (!result.Success)
         {
             return BadRequest(result);
         }
@@ -35,7 +35,7 @@ public class AccountsController : BaseController
     public ActionResult<AuthenticateResponse> Authenticate(AuthenticateRequest model)
     {
         var result = _accountManager.Authenticate(model);
-        if(!result.Success)
+        if (!result.Success)
         {
             return BadRequest(result);
         }
@@ -47,10 +47,10 @@ public class AccountsController : BaseController
     public async Task<ActionResult<AccountResponse>> Create(CreateRequest model)
     {
         var result = await _accountManager.Create(model);
-        if(!result.Success)
+        if (!result.Success)
         {
             return BadRequest(result.Message);
-}
+        }
         return Ok(result.Data);
     }
 
@@ -66,23 +66,61 @@ public class AccountsController : BaseController
         return Ok(result);
     }
 
-    // only admins can view all the users
-    [Authorize(Role.Admin)]
+    // only admins can view all the users and group admins can view the users in their group
+    [Authorize(Role.Admin,Role.GroupAdmin)]
     [HttpGet]
     public ActionResult<IEnumerable<AccountResponse>> GetAll()
     {
         var accounts = _accountManager.GetAll();
+
+        // group admins can get their group
+        if (Account.Role == Role.GroupAdmin)
+        {
+            return Ok(accounts.Where(a => a.UserGroupId == Account.UserGroupId));
+        }
+
         return Ok(accounts);
     }
 
     [HttpGet("{id:int}")]
     public ActionResult<AccountResponse> GetById(int id)
     {
-        // users can get their own account and admins can get any account
-        if (id != Account.Id && Account.Role != Role.Admin)
+        // users can get their own account, admins can get any account
+        if (id != Account.Id && Account.Role == Role.User)
             return Unauthorized(new { message = "Unauthorized" });
 
         var account = _accountManager.GetById(id);
+
+        //  group admins can get only from their group
+        if (Account.Role == Role.GroupAdmin && Account.UserGroupId != account.UserGroupId)
+        {
+            return Unauthorized(new { message = "Unauthorized" });
+        }
+
+        return Ok(account);
+    }
+
+    [HttpPut("{id:int}")]
+    public ActionResult<AccountResponse> Update(int id, UpdateRequest model)
+    {
+        // users can update their own account and admins can update any account
+        if (id != Account.Id && Account.Role == Role.User)
+            return Unauthorized(new { message = "Unauthorized" });
+
+        // only admins can update role and group
+        if (Account.Role != Role.Admin)
+        {
+            model.Role = null;
+            model.UserGroupId = 0;
+        }
+
+        if (Account.Role == Role.GroupAdmin)
+        {
+            var response = _accountManager.GetById(id);
+            if (response.UserGroupId != Account.UserGroupId) return Unauthorized(new { message = "Unauthorized" });
+        }
+
+        var account = _accountManager.Update(id, model);
         return Ok(account);
     }
 }

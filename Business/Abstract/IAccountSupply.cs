@@ -10,6 +10,6 @@ public interface IAccountSupply
     IEnumerable<AccountResponse> GetAll();
     AccountResponse GetById(int id);
     Task<IDataResult<AccountResponse>> Create(CreateRequest model);
-    AccountResponse Update(int id, UpdateRequest model);
+    IDataResult<AccountResponse> Update(int id, UpdateRequest model);
     IResult Delete(int id);
 }

@@ -112,8 +112,24 @@ public class AccountManager : IAccountSupply
         return result;
     }
 
-    public AccountResponse Update(int id, UpdateRequest model)
+    public IDataResult<AccountResponse> Update(int id, UpdateRequest model)
     {
-        throw new NotImplementedException();
+        var account = _accountDal.Get(id).Data;
+
+        // validate
+        if (account.Email != model.Email && _accountDal.CheckIfEmailExists(model.Email))
+            return new ErrorDataResult<AccountResponse>($"Mail '{model.Email}' sistemde kayıtlı!");
+
+        // hash password if it was entered
+        if (!string.IsNullOrEmpty(model.Password))
+            account.PasswordHash = BCrypt.HashPassword(model.Password);
+
+        // copy model to account and save
+        _mapper.Map(model, account);
+        account.Updated = DateTime.UtcNow;
+        _accountDal.Update(account);
+
+        var response = _mapper.Map<AccountResponse>(account);
+        return new SuccessDataResult<AccountResponse>(response);
     }
 }

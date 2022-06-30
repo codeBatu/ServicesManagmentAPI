@@ -9,5 +9,5 @@ public class AccountResponse
     public Role Role { get; set; }
     public DateTime Created { get; set; }
     public DateTime? Updated { get; set; }
-    public string? GroupName { get; set; }
+    public int? UserGroupId { get; set; }
 }
