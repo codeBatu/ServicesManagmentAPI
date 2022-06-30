@@ -65,4 +65,13 @@ public class AccountsController : BaseController
         if (!result.Success) return BadRequest(result);
         return Ok(result);
     }
+
+    // only admins can view all the users
+    [Authorize(Role.Admin)]
+    [HttpGet]
+    public ActionResult<IEnumerable<AccountResponse>> GetAll()
+    {
+        var accounts = _accountManager.GetAll();
+        return Ok(accounts);
+    }
 }

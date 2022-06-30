@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Model;
+using Model.DTOs.Accounts;
 using Model.Results;
 using Repository.DbContexts;
 using Repository.RepositoryInterface;
@@ -49,7 +50,8 @@ public class AccountRepository : IAccountRepository
 
     public IDataResult<List<Account>> GetAll()
     {
-        throw new NotImplementedException();
+        var accounts = _context.Accounts;
+        return new SuccessDataResult<List<Account>>(accounts.ToList());
     }
 
     public Account GetByMail(string email)

@@ -77,7 +77,8 @@ public class AccountManager : IAccountSupply
 
     public IEnumerable<AccountResponse> GetAll()
     {
-        throw new NotImplementedException();
+        var accounts = _accountDal.GetAll().Data;
+        return _mapper.Map<IList<AccountResponse>>(accounts);
     }
 
     public AccountResponse GetById(int id)
