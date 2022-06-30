@@ -103,10 +103,10 @@ namespace Repository
             var result = _smartPulseServiceManagerContext!.ServiceTable.FirstOrDefault(t => t.Id == id);
             if (result == null) return new ErrorResult("Geçersiz id");
 
-            if (result.ServiceStatus == (int)ServiceStatusEnum.Active)
+            if (result.ServiceStatus == ServiceStatusEnum.Active)
                 return new ErrorResult("Servis zaten aktif!");
 
-            result.ServiceStatus = (int)ServiceStatusEnum.Active;
+            result.ServiceStatus = ServiceStatusEnum.Active;
             _smartPulseServiceManagerContext.ServiceTable.Update(result);
             int saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
             if (saveResponseCode < 1)
@@ -120,10 +120,10 @@ namespace Repository
             var result = _smartPulseServiceManagerContext!.ServiceTable.FirstOrDefault(t => t.Id == id);
             if (result == null) return new ErrorResult("Geçersiz id");
 
-            if (result.ServiceStatus == (int)ServiceStatusEnum.Inactive)
+            if (result.ServiceStatus == ServiceStatusEnum.Inactive)
                 return new ErrorResult("Servis zaten inaktif!");
 
-            result.ServiceStatus = (int)ServiceStatusEnum.Inactive;
+            result.ServiceStatus = ServiceStatusEnum.Inactive;
             _smartPulseServiceManagerContext.ServiceTable.Update(result);
             int saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
             if (saveResponseCode < 1)

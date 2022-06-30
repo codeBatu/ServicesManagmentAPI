@@ -1,60 +1,81 @@
 using Business.Abstract;
 using Business.Concrete;
+using Business.Helpers;
 using Model;
 using Repository;
 using Repository.DbContexts;
 using Repository.RepositoryInterface;
 using System.Text.Json.Serialization;
-
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+using Business.Helpers.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers().AddJsonOptions(x =>
-                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-
-builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-                      policy =>
-                      {
-                          policy.WithOrigins("http://localhost:3000")
-                                                  .AllowAnyHeader()
-                                                  .AllowAnyMethod();
-                      });
-});
+    var services = builder.Services;
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen().AddSingleton<SmartPulseServiceManagerContext>()
-    .AddScoped<IServiceManagerRepository, ServiceManagerRepository>()
-    .AddScoped<ILogRepository, LogRepository>()
-    .AddScoped<IServiceSupply, ServiceManager>().AddScoped<ILogRepository, LogRepository>()
-    .AddScoped<ILogSupply, LogManager>()
-    .AddScoped<IMailRepository, MailRepository>()
-    .AddScoped<IMailSupply, MailManager>()
-    .AddScoped<IEmailService, EmailManager>();
+    services.AddDbContext<SmartPulseServiceManagerContext>();
+    services.AddCors();
+    services.AddControllers().AddJsonOptions(x =>
+    {
+        // serialize enums as strings in api responses
+        x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
-builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+    services.AddControllers().AddJsonOptions(x =>
+                    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
+
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    services.AddEndpointsApiExplorer();
+
+    services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+    services.AddSwaggerGen();
+
+    // configure strongly typed settings object
+    services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+
+    // configure DI for application services
+    services.AddScoped<IServiceManagerRepository, ServiceManagerRepository>();
+    services.AddScoped<IServiceSupply, ServiceManager>();
+
+    services.AddScoped<ILogRepository, LogRepository>();
+    services.AddScoped<ILogSupply, LogManager>();
+
+    services.AddScoped<IMailRepository, MailRepository>();
+    services.AddScoped<IMailSupply, MailManager>();
+
+    services.AddScoped<IEmailService, EmailService>();
+    services.AddScoped<IJwtUtils, JwtUtils>();
+
+    services.AddScoped<IAccountRepository, AccountRepository>();
+    services.AddScoped<IAccountSupply, AccountManager>();
+}
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(x => x.SwaggerEndpoint("/swagger/v1/swagger.json", ".NET Service Management API"));
+
+    //app.UseHttpsRedirection();
+
+    // global cors policy
+    app.UseCors(x => x
+        .SetIsOriginAllowed(origin => true)
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials());
+
+    // custom jwt auth middleware
+    app.UseMiddleware<JwtMiddleware>();
+
+    //app.UseAuthorization();
+
+    app.MapControllers();
 }
 
-app.UseHttpsRedirection();
-
-app.UseCors(MyAllowSpecificOrigins);
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+app.Run("http://localhost:4000");

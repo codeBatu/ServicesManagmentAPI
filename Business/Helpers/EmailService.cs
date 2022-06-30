@@ -1,18 +1,22 @@
-﻿using Business.Abstract;
-using MailKit.Net.Smtp;
+﻿using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using MimeKit.Text;
 using Model;
 
-namespace Business.Concrete;
+namespace Business.Helpers;
 
-public class EmailManager : IEmailService
+public interface IEmailService
+{
+    void Send(string to, string subject, string content, string from = null);
+}
+
+public class EmailService : IEmailService
 {
     private readonly AppSettings _appSettings;
 
-    public EmailManager(IOptions<AppSettings> appSettings)
+    public EmailService(IOptions<AppSettings> appSettings)
     {
         _appSettings = appSettings.Value;
     }
