@@ -70,9 +70,9 @@ public class AccountManager : IAccountSupply
         return new SuccessDataResult<AccountResponse>(response);
     }
 
-    public void Delete(int id)
+    public IResult Delete(int id)
     {
-        throw new NotImplementedException();
+        return _accountDal.Delete(id);
     }
 
     public IEnumerable<AccountResponse> GetAll()

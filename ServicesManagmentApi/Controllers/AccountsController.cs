@@ -53,4 +53,16 @@ public class AccountsController : BaseController
 }
         return Ok(result.Data);
     }
+
+    [HttpDelete("{id:int}")]
+    public IActionResult Delete(int id)
+    {
+        // users can delete their own account and admins can delete any account
+        if (id != Account.Id && Account.Role != Role.Admin)
+            return Unauthorized(new { message = "Unauthorized" });
+
+        var result = _accountManager.Delete(id);
+        if (!result.Success) return BadRequest(result);
+        return Ok(result);
+    }
 }

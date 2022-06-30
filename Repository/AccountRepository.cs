@@ -39,7 +39,12 @@ public class AccountRepository : IAccountRepository
 
     public IDataResult<Account> Get(int id)
     {
-        throw new NotImplementedException();
+        var account = _context.Accounts.Find(id);
+        if (account is null)
+        {
+            return new ErrorDataResult<Account>("Hesap bulunamadı!");
+        }
+        return new SuccessDataResult<Account>(account);
     }
 
     public IDataResult<List<Account>> GetAll()
@@ -71,5 +76,17 @@ public class AccountRepository : IAccountRepository
     public bool IsEmailRegistered(string email)
     {
         return _context.Accounts.Any(x => x.Email == email);
+    }
+
+    public IResult Delete(int id)
+    {
+        var result = Get(id);
+        if (!result.Success)
+        {
+            return result;
+        }
+        _context.Accounts.Remove(result.Data);
+        _context.SaveChanges();
+        return new SuccessResult("Hesap silindi!");
     }
 }

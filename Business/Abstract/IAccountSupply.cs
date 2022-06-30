@@ -11,5 +11,5 @@ public interface IAccountSupply
     AccountResponse GetById(int id);
     Task<IDataResult<AccountResponse>> Create(CreateRequest model);
     AccountResponse Update(int id, UpdateRequest model);
-    void Delete(int id);
+    IResult Delete(int id);
 }
