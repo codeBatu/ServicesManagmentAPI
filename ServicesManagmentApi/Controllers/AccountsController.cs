@@ -74,4 +74,15 @@ public class AccountsController : BaseController
         var accounts = _accountManager.GetAll();
         return Ok(accounts);
     }
+
+    [HttpGet("{id:int}")]
+    public ActionResult<AccountResponse> GetById(int id)
+    {
+        // users can get their own account and admins can get any account
+        if (id != Account.Id && Account.Role != Role.Admin)
+            return Unauthorized(new { message = "Unauthorized" });
+
+        var account = _accountManager.GetById(id);
+        return Ok(account);
+    }
 }

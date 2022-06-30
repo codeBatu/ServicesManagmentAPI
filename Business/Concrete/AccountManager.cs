@@ -83,7 +83,8 @@ public class AccountManager : IAccountSupply
 
     public AccountResponse GetById(int id)
     {
-        throw new NotImplementedException();
+        var account = _accountDal.Get(id).Data;
+        return _mapper.Map<AccountResponse>(account);
     }
 
     public async Task<IResult> Register(RegisterRequest model)
