@@ -1,6 +1,4 @@
-﻿
-
-namespace Model
+﻿namespace Model
 {
 
     public class ServiceTable
@@ -18,7 +16,7 @@ namespace Model
         public DateTime? RestDateTime { get; set; }
         public int? RestartCount { get; set; }
         public string? Version { get; set; }
-
+        public bool IsDelete { get; set; }
         public virtual ICollection<LogTable> LogTables { get; set; }
 
     }

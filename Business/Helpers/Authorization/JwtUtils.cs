@@ -16,11 +16,11 @@ public interface IJwtUtils
 
 public class JwtUtils : IJwtUtils
 {
-    private readonly SmartPulseServiceManagerContext _context;
+    private readonly SmartPulseServiceManagerDbContext _context;
     private readonly AppSettings _appSettings;
 
     public JwtUtils(
-        SmartPulseServiceManagerContext context,
+        SmartPulseServiceManagerDbContext context,
         IOptions<AppSettings> appSettings)
     {
         _context = context;

@@ -7,9 +7,9 @@ namespace Repository
 {
     public class LogRepository : ILogRepository
     {
-        private readonly SmartPulseServiceManagerContext _smartPulseServiceManagerContext;
+        private readonly SmartPulseServiceManagerDbContext _smartPulseServiceManagerContext;
 
-        public LogRepository(SmartPulseServiceManagerContext smartPulseServiceManagerContext)
+        public LogRepository(SmartPulseServiceManagerDbContext smartPulseServiceManagerContext)
         {
             _smartPulseServiceManagerContext = smartPulseServiceManagerContext;
         }

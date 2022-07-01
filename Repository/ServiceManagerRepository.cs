@@ -14,9 +14,9 @@ namespace Repository
 {
     public class ServiceManagerRepository : IServiceManagerRepository
     {
-        private readonly SmartPulseServiceManagerContext? _smartPulseServiceManagerContext;
+        private readonly SmartPulseServiceManagerDbContext? _smartPulseServiceManagerContext;
 
-        public ServiceManagerRepository(SmartPulseServiceManagerContext? smartPulseServiceManagerContext)
+        public ServiceManagerRepository(SmartPulseServiceManagerDbContext? smartPulseServiceManagerContext)
         {
             _smartPulseServiceManagerContext = smartPulseServiceManagerContext;
         }
@@ -87,8 +87,9 @@ namespace Repository
             {
                 return new ErrorResult("Geçersiz id");
             }
-
-            _smartPulseServiceManagerContext!.ServiceTable.Remove(result);
+            result.IsDelete = true;
+            _smartPulseServiceManagerContext.ServiceTable.Update(result);
+            //    _smartPulseServiceManagerContext!.ServiceTable.Remove(result);
             var saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
             if (saveResponseCode < 1)
             {
@@ -155,7 +156,7 @@ namespace Repository
         /// <returns></returns>
         public IDataResult<ServiceTable> GetService(string name)
         {
-            var result = _smartPulseServiceManagerContext?.ServiceTable.Include(s => s.LogTables).SingleOrDefault(t => t.ServiceName == name);
+            var result = _smartPulseServiceManagerContext?.ServiceTable.Include(s => s.LogTables).Where(s=>s.IsDelete==false).SingleOrDefault(t => t.ServiceName == name);
             if (result is null) return new ErrorDataResult<ServiceTable>("Bu isimde bir servis bulunamadı!");
             result.ActiveLife = (DateTime.Now - result.CreateDateTime).ToString();
             return new SuccessDataResult<ServiceTable>(result);
@@ -163,7 +164,7 @@ namespace Repository
 
         public IDataResult<ServiceTable> Get(int id)
         {
-            var service = _smartPulseServiceManagerContext?.ServiceTable.Include(s => s.LogTables).SingleOrDefault(s => s.Id == id);
+            var service = _smartPulseServiceManagerContext?.ServiceTable.Include(s => s.LogTables).Where(s => s.IsDelete == false).SingleOrDefault(s => s.Id == id);
             if (service is null) return new ErrorDataResult<ServiceTable>("Geçersiz id!");
             service.ActiveLife = (DateTime.Now - service.CreateDateTime).ToString();
             return new SuccessDataResult<ServiceTable>(service);
@@ -171,7 +172,7 @@ namespace Repository
 
         public IDataResult<List<ServiceTable>> GetAll()
         {
-            var list = _smartPulseServiceManagerContext!.ServiceTable.Include(s => s.LogTables).ToList();
+            var list = _smartPulseServiceManagerContext!.ServiceTable.Include(s => s.LogTables).Where(s => s.IsDelete == false).ToList();
             foreach (var service in list)
             {
                 service.ActiveLife = (DateTime.Now - service.CreateDateTime).ToString();

@@ -14,9 +14,9 @@ namespace Repository;
 
 public class AccountRepository : IAccountRepository
 {
-    private readonly SmartPulseServiceManagerContext? _context;
+    private readonly SmartPulseServiceManagerDbContext? _context;
 
-    public AccountRepository(SmartPulseServiceManagerContext? context)
+    public AccountRepository(SmartPulseServiceManagerDbContext? context)
     {
         _context = context;
     }

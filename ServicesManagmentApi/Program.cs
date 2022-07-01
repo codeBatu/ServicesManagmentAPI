@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 {
     var services = builder.Services;
 
-    services.AddDbContext<SmartPulseServiceManagerContext>();
+    services.AddDbContext<SmartPulseServiceManagerDbContext>();
     services.AddCors();
     services.AddControllers().AddJsonOptions(x =>
     {

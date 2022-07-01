@@ -12,16 +12,16 @@ namespace Repository;
 
 public class MailRepository : IMailRepository
 {
-    private readonly SmartPulseServiceManagerContext _smartPulseServiceManagerContext;
+    private readonly SmartPulseServiceManagerDbContext _smartPulseServiceManagerContext;
 
-    public MailRepository(SmartPulseServiceManagerContext smartPulseServiceManagerContext)
+    public MailRepository(SmartPulseServiceManagerDbContext smartPulseServiceManagerContext)
     {
         _smartPulseServiceManagerContext = smartPulseServiceManagerContext;
     }
 
     public async Task<IResult> Create(MailTable entity)
     {
-        _smartPulseServiceManagerContext.MailTables.Add(entity);
+     //   _smartPulseServiceManagerContext.MailTables.Add(entity);
         var saveResponseCode = await _smartPulseServiceManagerContext.SaveChangesAsync();
         if (saveResponseCode != 1)
         {
