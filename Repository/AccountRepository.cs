@@ -50,7 +50,7 @@ public class AccountRepository : IAccountRepository
 
     public IDataResult<List<Account>> GetAll()
     {
-        var accounts = _context.Accounts;
+        var accounts = _context.Accounts.Include(s=>s.UserGroup);
         return new SuccessDataResult<List<Account>>(accounts.ToList());
     }
 

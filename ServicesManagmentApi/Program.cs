@@ -52,6 +52,8 @@ var builder = WebApplication.CreateBuilder(args);
 
     services.AddScoped<IAccountRepository, AccountRepository>();
     services.AddScoped<IAccountSupply, AccountManager>();
+    services.AddScoped<IGroupRepository, GroupRepository>();
+    services.AddScoped<IGroupSupply, GroupManager>();
 }
 
 var app = builder.Build();

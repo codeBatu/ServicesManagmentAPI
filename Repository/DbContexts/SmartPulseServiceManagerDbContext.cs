@@ -19,7 +19,6 @@ namespace Repository.DbContexts
 
         public virtual DbSet<Account> Accounts { get; set; } = null!;
         public virtual DbSet<LogTable> LogTable { get; set; } = null!;
-        public virtual DbSet<Membership> Memberships { get; set; } = null!;
         public virtual DbSet<ServiceTable> ServiceTable { get; set; } = null!;
         public virtual DbSet<UserGroup> UserGroups { get; set; } = null!;
 
@@ -64,28 +63,6 @@ namespace Repository.DbContexts
                     .HasConstraintName("FK__LogTable__Servic__267ABA7A");
             });
 
-            modelBuilder.Entity<Membership>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToTable("Membership");
-
-                entity.HasOne(d => d.GroupAdmin)
-                    .WithMany()
-                    .HasForeignKey(d => d.GroupAdminId)
-                    .HasConstraintName("FK__Membershi__Group__4316F928");
-
-                entity.HasOne(d => d.Group)
-                    .WithMany()
-                    .HasForeignKey(d => d.GroupId)
-                    .HasConstraintName("FK__Membershi__Group__4222D4EF");
-
-                entity.HasOne(d => d.User)
-                    .WithMany()
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__Membershi__UserI__412EB0B6");
-            });
-
             modelBuilder.Entity<ServiceTable>(entity =>
             {
                 entity.ToTable("ServiceTable");
@@ -105,7 +82,11 @@ namespace Repository.DbContexts
 
             modelBuilder.Entity<UserGroup>(entity =>
             {
+                entity.Property(e => e.Admin).HasMaxLength(50);
+
                 entity.Property(e => e.GroupName).HasMaxLength(50);
+
+                entity.Property(e => e.Member).HasMaxLength(50);
             });
 
             OnModelCreatingPartial(modelBuilder);

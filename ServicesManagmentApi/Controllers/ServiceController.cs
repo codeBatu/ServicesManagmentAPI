@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Helpers.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
@@ -17,7 +18,7 @@ namespace ServiceManagerWepApi.Controllers
         {
             _serviceManager = serviceManager;
         }
-
+        [Authorize(Role.Admin, Role.GroupAdmin)]
         [HttpPost("createService")]
         public async Task<IActionResult> CreateService([FromBody] CreateServiceDTO createService)
         {
@@ -36,6 +37,7 @@ namespace ServiceManagerWepApi.Controllers
             }
             return Ok(result);
         }
+        [Authorize(Role.Admin, Role.GroupAdmin)]
         [HttpPut("updateService")]
         public async Task<IActionResult> UpdateService(int id, [FromBody] UpdateServiceDTO updateService)
         {
@@ -48,6 +50,7 @@ namespace ServiceManagerWepApi.Controllers
             }
             return Ok(result);
         }
+        [Authorize(Role.Admin, Role.GroupAdmin)]
         [HttpDelete("deleteService")]
         public async Task<IActionResult> DeleteService(int id)
         {
@@ -58,6 +61,7 @@ namespace ServiceManagerWepApi.Controllers
             }
             return Ok(result);
         }
+        [Authorize(Role.Admin, Role.GroupAdmin)]
         [HttpPut("restartService")]
         public async Task<IActionResult> RestartServices(int id)
         {
@@ -68,6 +72,7 @@ namespace ServiceManagerWepApi.Controllers
             }
             return Ok(result);
         }
+        [Authorize(Role.Admin, Role.GroupAdmin)]
         [HttpPut("activeService")]
         public async Task<IActionResult> ActiveServicesById(int id)
         {
@@ -78,6 +83,7 @@ namespace ServiceManagerWepApi.Controllers
             }
             return Ok(result);
         }
+        [Authorize(Role.Admin, Role.GroupAdmin)]
         [HttpPut("inActiveService")]
         public async Task<IActionResult> InActiveServicesById(int id)
         {
