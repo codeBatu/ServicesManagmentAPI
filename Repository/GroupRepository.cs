@@ -33,6 +33,7 @@ namespace Repository
             {
                 return new ErrorResult("Grup bulunamadı.");
             }
+            result.UserGroupId = resultGroup.Id;
             resultGroup.Admin = result.FirstName + result.LastName;
             result.Role = Role.GroupAdmin;
             await _context.SaveChangesAsync();
@@ -50,10 +51,12 @@ namespace Repository
             }
 
             var resultGroup =await  _context.UserGroups.FirstOrDefaultAsync(z=>z.Id==groupId);
+      
           if(resultGroup is null)
             {
                 return new ErrorResult("Grup bulunamadı.");
             }
+            result.UserGroupId = resultGroup.Id;
             resultGroup.Member = result.FirstName+ result.LastName;
             await _context.SaveChangesAsync();
             return new SuccessResult("Kullanıcı gruba eklendi.");
