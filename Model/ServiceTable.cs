@@ -17,7 +17,7 @@
         public int? RestartCount { get; set; }
         public string? Version { get; set; }
         public bool IsDelete { get; set; }
-        public virtual ICollection<LogTable> LogTables { get; set; }
+        public  ICollection<LogTable> LogTables { get; set; }
 
     }
 }

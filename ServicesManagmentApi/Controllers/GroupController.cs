@@ -20,7 +20,7 @@ namespace ServicesManagmentApi.Controllers
         {
             this.groupRepository = groupRepository;
         }
-        [Authorize(Role.Admin)]
+    
         [HttpPost("createGroup")]
         public async Task<ActionResult<UserGroup>> Create([FromBody] GroupDto model)
         {
@@ -32,7 +32,7 @@ namespace ServicesManagmentApi.Controllers
             }
             return Ok(result);
         }
-        [Authorize(Role.Admin)]
+       
         [HttpPost("AddGroupAdmin")]
         public async Task<ActionResult<UserGroup>> AddGroupAdmin([FromBody] AccountMemberDto model,int id)
         {
@@ -44,7 +44,7 @@ namespace ServicesManagmentApi.Controllers
             }
             return Ok(result);
         }
-        [Authorize(Role.Admin, Role.GroupAdmin)]
+      
         [HttpPost("AddGroupUser")]
         public async Task<ActionResult<UserGroup>> AddGroupMember([FromBody]  AccountMemberDto memberDto, int id)
         {
@@ -56,7 +56,7 @@ namespace ServicesManagmentApi.Controllers
             }
             return Ok(result);
         }
-        [Authorize(Role.Admin)]
+     
         [HttpGet("getAllGroup")]
         public IActionResult GetAllService()
         {
@@ -67,7 +67,7 @@ namespace ServicesManagmentApi.Controllers
             }
             return Ok(result);
         }
-        [Authorize(Role.Admin)]
+      
         [HttpGet("GetServiceById")]
         public IActionResult GetById(int id)
         {
@@ -78,7 +78,7 @@ namespace ServicesManagmentApi.Controllers
             }
             return Ok(result);
         }
-        [Authorize(Role.Admin, Role.GroupAdmin)]
+        [HttpPut("updateGroup")]
         public async Task<IActionResult> UpdateGroup(int id, GroupDto groupDto)
         {
             var group = new UserGroup { GroupName = groupDto.Name };
@@ -89,7 +89,5 @@ namespace ServicesManagmentApi.Controllers
             }
             return Ok(result);
         }
-
-
     }
 }

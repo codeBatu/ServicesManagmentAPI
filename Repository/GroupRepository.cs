@@ -47,15 +47,10 @@ namespace Repository
         public async Task<IResult> AddGroupAdmin(Account account, int groupId)
         {
             var user =await findUserById(account.Id);
-
-
+           
+            
             var resultGroup =await findGroupById(groupId);
-            if (resultGroup.Admin is not null)
-            {
-                return new ErrorResult("Group Admini dolu");
-            }
-            user.UserGroupId = resultGroup.Id;
-            resultGroup.Admin = $"{user.FirstName} {user.LastName} ";
+          
             user.Role = Role.GroupAdmin;
             await saveChanges("Group Admin Ekleme");
             return new SuccessResult("Kullanıcı gruba eklendi.");
@@ -68,10 +63,11 @@ namespace Repository
             var user = await findUserById(Userİd);
           
             var resultGroup = await findGroupById(groupId);
-
+        
+            
           
             user.UserGroupId = resultGroup.Id;
-            resultGroup.Member = $"{user.FirstName} {user.LastName} ";
+        
             await saveChanges("Group User Ekleme");
             return new SuccessResult("Kullanıcı gruba eklendi.");
             

@@ -65,6 +65,7 @@ namespace ServiceManagerWepApi.Controllers
         [HttpPut("restartService")]
         public async Task<IActionResult> RestartServices(int id)
         {
+            
             var result = await _serviceManager!.RestartService(id);
             if (!result.Success)
             {

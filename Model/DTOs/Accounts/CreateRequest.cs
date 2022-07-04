@@ -11,7 +11,7 @@ public class CreateRequest
     public string LastName { get; set; }
 
     [Required]
-    [EnumDataType(typeof(Role))]
+    [EnumDataType(typeof(Model.Role))]
     public string Role { get; set; }
 
     [Required]

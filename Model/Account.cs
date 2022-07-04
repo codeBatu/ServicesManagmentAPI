@@ -10,11 +10,12 @@ namespace Model
         public string LastName { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string PasswordHash { get; set; } = null!;
-        public Role Role { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
         public int? UserGroupId { get; set; }
+        public Role? Role { get; set; }
 
-        public virtual UserGroup? UserGroup { get; set; }
+        public  UserGroup? UserGroup { get; set; }
+        public  GroupAccount GroupAccount { get; set; } = null!;
     }
 }

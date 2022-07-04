@@ -11,6 +11,6 @@ namespace Model
         public string? Contents { get; set; }
         public DateTime? CreateDateTime { get; set; }
 
-        public virtual ServiceTable? Service { get; set; }
+        public  ServiceTable? Service { get; set; }
     }
 }

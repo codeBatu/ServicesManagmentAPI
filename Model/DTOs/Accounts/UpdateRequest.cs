@@ -1,4 +1,4 @@
-﻿
+﻿using Model;
 using System.ComponentModel.DataAnnotations;
 
 namespace Model.DTOs.Accounts;
@@ -14,7 +14,7 @@ public class UpdateRequest
     public string LastName { get; set; }
     public int UserGroupId { get; set; }
 
-    [EnumDataType(typeof(Role))]
+    [EnumDataType(typeof(Model.Role))]
     public string Role
     {
         get => _role;

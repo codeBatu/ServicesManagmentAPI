@@ -18,6 +18,7 @@ namespace Repository.DbContexts
         }
 
         public virtual DbSet<Account> Accounts { get; set; } = null!;
+        public virtual DbSet<GroupAccount> GroupAccounts { get; set; } = null!;
         public virtual DbSet<LogTable> LogTable { get; set; } = null!;
         public virtual DbSet<ServiceTable> ServiceTable { get; set; } = null!;
         public virtual DbSet<UserGroup> UserGroups { get; set; } = null!;
@@ -51,6 +52,14 @@ namespace Repository.DbContexts
                     .HasConstraintName("FK_Accounts_UserGroups");
             });
 
+            modelBuilder.Entity<GroupAccount>(entity =>
+            {
+                entity.HasKey(e => e.AccountId);
+
+                entity.Property(e => e.AccountId).ValueGeneratedNever();
+
+            });
+
             modelBuilder.Entity<LogTable>(entity =>
             {
                 entity.ToTable("LogTable");
@@ -82,11 +91,7 @@ namespace Repository.DbContexts
 
             modelBuilder.Entity<UserGroup>(entity =>
             {
-                entity.Property(e => e.Admin).HasMaxLength(50);
-
                 entity.Property(e => e.GroupName).HasMaxLength(50);
-
-                entity.Property(e => e.Member).HasMaxLength(50);
             });
 
             OnModelCreatingPartial(modelBuilder);
