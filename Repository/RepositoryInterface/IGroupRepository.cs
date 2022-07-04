@@ -12,9 +12,9 @@ namespace Repository.RepositoryInterface
     {
         Task<IResult> AddUserGroup(int Userİd,int groupId);
         Task<IResult> AddGroupAdmin(Account account, int groupId);
-    
-        
-        
+
+        Task<IResult> Update(int id, UserGroup entity);
+
 
 
     }

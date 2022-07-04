@@ -78,6 +78,17 @@ namespace ServicesManagmentApi.Controllers
             }
             return Ok(result);
         }
+        [Authorize(Role.Admin, Role.GroupAdmin)]
+        public async Task<IActionResult> UpdateGroup(int id, GroupDto groupDto)
+        {
+            var group = new UserGroup { GroupName = groupDto.Name };
+            var result = await groupRepository!.Update(id, group);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
 
 
     }

@@ -16,5 +16,6 @@ namespace Business.Abstract
         Task<IResult> Create(UserGroup entity);
         IDataResult<UserGroup> Get(int id);
         IDataResult<List<UserGroup>> GetAll();
+        Task<IResult> Update(int id, UserGroup entity);
     }
 }

@@ -130,5 +130,18 @@ namespace Repository
 
             return new SuccessDataResult<List<UserGroup>>(list);
         }
+
+        public async Task<IResult> Update(int id, UserGroup entity)
+        {
+            var result = await findGroupById(id);
+            result.GroupName = entity.GroupName;
+            if (result.GroupName == entity.GroupName)
+            {
+                return new ErrorResult("Grup aynı değiştirilemedi.");
+            }
+            _context.Update(entity);
+            await saveChanges("Group Güncelleme");
+            return new SuccessResult(" Başarıyla güncellendi.");
+        }
     }
 }

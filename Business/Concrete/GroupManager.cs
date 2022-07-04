@@ -43,5 +43,10 @@ namespace Business.Concrete
         {
             return groupRepository.GetAll();
         }
+
+        public async Task<Model.Results.IResult> Update(int id, UserGroup entity)
+        {
+            return await groupRepository.Update(id, entity);
+        }
     }
 }
