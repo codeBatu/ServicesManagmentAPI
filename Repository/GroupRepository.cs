@@ -39,7 +39,7 @@ namespace Repository
         private async Task saveChanges(string dbSaveName)
         {
             var content = await _context.SaveChangesAsync();
-            if(content !=1)
+            if(content ==1)
             {
                 throw new Exception($"{dbSaveName} :değişiklik eklenemedi.");
             }
@@ -50,7 +50,10 @@ namespace Repository
 
 
             var resultGroup =await findGroupById(groupId);
-
+            if (resultGroup.Admin is not null)
+            {
+                return new ErrorResult("Group Admini dolu");
+            }
             user.UserGroupId = resultGroup.Id;
             resultGroup.Admin = $"{user.FirstName} {user.LastName} ";
             user.Role = Role.GroupAdmin;
@@ -63,7 +66,7 @@ namespace Repository
            int Userİd, int groupId)
         {
             var user = await findUserById(Userİd);
-
+          
             var resultGroup = await findGroupById(groupId);
 
           
@@ -106,10 +109,10 @@ namespace Repository
             return new SuccessDataResult<UserGroup>(result);
         }
 
-
+        
         public  IDataResult<UserGroup> Get(int id)
         {
-            var result = _context.UserGroups.FirstOrDefault(x => x.Id == id);
+            var result = _context.UserGroups.Include(s => s.Accounts).FirstOrDefault(x => x.Id == id);
             if (result is null)
             {
                 return new ErrorDataResult<UserGroup>("Grup bulunamadı.");
