@@ -11,7 +11,7 @@ namespace Model
         }
 
         public int Id { get; set; }
-        public string GroupName { get; set; } = null!;
+        public string? GroupName { get; set; } 
         public string? Member { get; set; }
         public string? Admin { get; set; }
 

@@ -19,24 +19,42 @@ namespace Repository
         {
             _context = context;
         }
-
+        private async Task<Account> findUserById(int id)
+        {var user = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == id);
+            if (user == null)
+            {
+               throw new Exception("Kullanıcı bulunamadı.");
+            }
+            return user;
+        }
+        private async Task<UserGroup> findGroupById(int id)
+        {
+            var user = await _context.UserGroups.FirstOrDefaultAsync(x => x.Id == id);
+            if (user == null)
+            {
+                throw new Exception("Grup bulunamadı.");
+            }
+            return user;
+        }
+        private async Task saveChanges(string dbSaveName)
+        {
+            var content = await _context.SaveChangesAsync();
+            if(content !=1)
+            {
+                throw new Exception($"{dbSaveName} :değişiklik eklenemedi.");
+            }
+        }
         public async Task<IResult> AddGroupAdmin(Account account, int groupId)
         {
-            var result = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == account.Id);
-            if (result == null)
-            {
-                return new ErrorResult("Kullanıcı bulunamadı.");
-            }
-        
-            var resultGroup = await _context.UserGroups.FirstOrDefaultAsync(z => z.Id == groupId);
-            if (resultGroup is null)
-            {
-                return new ErrorResult("Grup bulunamadı.");
-            }
-            result.UserGroupId = resultGroup.Id;
-            resultGroup.Admin = result.FirstName + result.LastName;
-            result.Role = Role.GroupAdmin;
-            await _context.SaveChangesAsync();
+            var user =await findUserById(account.Id);
+
+
+            var resultGroup =await findGroupById(groupId);
+
+            user.UserGroupId = resultGroup.Id;
+            resultGroup.Admin = $"{user.FirstName} {user.LastName} ";
+            user.Role = Role.GroupAdmin;
+            await saveChanges("Group Admin Ekleme");
             return new SuccessResult("Kullanıcı gruba eklendi.");
         }
 
@@ -44,21 +62,14 @@ namespace Repository
         public async Task<IResult> AddUserGroup(
            int Userİd, int groupId)
         {
-            var result =await  _context.Accounts.FirstOrDefaultAsync(x => x.Id == Userİd);
-            if (result == null)
-            {
-                return new ErrorResult("Kullanıcı bulunamadı.");
-            }
+            var user = await findUserById(Userİd);
 
-            var resultGroup =await  _context.UserGroups.FirstOrDefaultAsync(z=>z.Id==groupId);
-      
-          if(resultGroup is null)
-            {
-                return new ErrorResult("Grup bulunamadı.");
-            }
-            result.UserGroupId = resultGroup.Id;
-            resultGroup.Member = result.FirstName+ result.LastName;
-            await _context.SaveChangesAsync();
+            var resultGroup = await findGroupById(groupId);
+
+          
+            user.UserGroupId = resultGroup.Id;
+            resultGroup.Member = $"{user.FirstName} {user.LastName} ";
+            await saveChanges("Group User Ekleme");
             return new SuccessResult("Kullanıcı gruba eklendi.");
             
         }
@@ -66,9 +77,9 @@ namespace Repository
         public async Task<IResult> Create(UserGroup entity)
         {
             // isme göre servis bilgisi getir
-            var result =await _context.UserGroups.FirstOrDefaultAsync(x => x.GroupName != entity.GroupName);
+            var result = await _context.UserGroups.FirstOrDefaultAsync(x => x.GroupName == entity.GroupName);
             // eğer aynı isimde bir servis varsa error result dön
-            if (result is null)
+            if (result is not null)
             {
                 return new ErrorResult("Aynı isimde grup sistemde kayıtlı.");
             }
@@ -82,19 +93,38 @@ namespace Repository
             }
             return new SuccessResult("Servis başarıyla kaydedildi.");
         }
+        /// <summary>
+        /// ServiceName göre servisi tablosundaki veriyi getirir
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public IDataResult<UserGroup> GetGroup(string name)
+        {
+            var result = _context?.UserGroups.Include(s => s.Accounts).SingleOrDefault(t => t.GroupName == name);
+            if (result is null) return new ErrorDataResult<UserGroup>("Bu isimde bir group bulunamadı!");
+          
+            return new SuccessDataResult<UserGroup>(result);
+        }
 
-      
 
         public  IDataResult<UserGroup> Get(int id)
         {
-
-            return new SuccessDataResult<UserGroup>( _context.UserGroups.FirstOrDefault(x => x.Id == id));
+            var result = _context.UserGroups.FirstOrDefault(x => x.Id == id);
+            if (result is null)
+            {
+                return new ErrorDataResult<UserGroup>("Grup bulunamadı.");
+            }
+            return new SuccessDataResult<UserGroup>( result);
         }
 
         public IDataResult<List<UserGroup>> GetAll()
         {
             var list = _context!.UserGroups.Include(s => s.Accounts).ToList();
-           
+            if (list is null)
+            {
+                return new ErrorDataResult<List<UserGroup>>("Grup bulunamadı.");
+            }
+
             return new SuccessDataResult<List<UserGroup>>(list);
         }
     }
