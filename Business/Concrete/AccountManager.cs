@@ -9,6 +9,7 @@ using Model.DTOs.Accounts;
 using Repository.RepositoryInterface;
 using BCrypt.Net;
 using Model.Results;
+using System.Collections.Generic;
 
 public class AccountManager : IAccountSupply
 {
@@ -85,6 +86,16 @@ public class AccountManager : IAccountSupply
     {
         var account = _accountDal.Get(id).Data;
         return _mapper.Map<AccountResponse>(account);
+    }
+
+    public IDataResult<List<Account>> GetUsersWithoutGroup()
+    {
+        return _accountDal.GetUsersWithoutGroup();
+    }
+
+    public IDataResult<List<UserWithPermissions>> GetUsersWithPermissions()
+    {
+        return _accountDal.GetUsersWithPermissions();
     }
 
     public async Task<IResult> Register(RegisterRequest model)
