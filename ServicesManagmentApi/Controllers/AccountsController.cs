@@ -23,6 +23,7 @@ public class AccountsController : BaseController
     public async Task<IActionResult> Register(RegisterRequest model)
     {
         var result = await _accountManager.Register(model);
+       
         if (!result.Success)
         {
             return BadRequest(result);
@@ -82,7 +83,23 @@ public class AccountsController : BaseController
         return Ok(accounts);
     }
 
-    [HttpGet("{id:int}")]
+    [AllowAnonymous]
+    [HttpGet("getWithPermissions")]
+    public ActionResult<IEnumerable<Account>> GetAllWithPermissions()
+    {
+        var accounts = _accountManager.GetUsersWithPermissions();
+        return Ok(accounts);
+    }
+    
+    [AllowAnonymous]
+    [HttpGet("getWithoutGroup")]
+    public ActionResult<IEnumerable<UserWithPermissions>> GetAllWithoutGroup()
+    {
+        var accounts = _accountManager.GetUsersWithoutGroup();
+        return Ok(accounts);
+    }
+
+    [HttpGet("getUser/{id:int}")]
     public ActionResult<AccountResponse> GetById(int id)
     {
         // users can get their own account, admins can get any account
@@ -101,7 +118,7 @@ public class AccountsController : BaseController
     }
     
 
-    [HttpPut("{id:int}")]
+    [HttpPut("update/{id:int}")]
     public ActionResult<AccountResponse> Update(int id, UpdateRequest model)
     {
         // users can update their own account and admins can update any account

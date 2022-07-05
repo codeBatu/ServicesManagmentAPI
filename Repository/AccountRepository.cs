@@ -28,6 +28,7 @@ public class AccountRepository : IAccountRepository
 
     public async Task<IResult> Create(Account entity)
     {
+        
         _context.Accounts.Add(entity);
         var result = await _context.SaveChangesAsync();
 
@@ -90,5 +91,43 @@ public class AccountRepository : IAccountRepository
         _context.Accounts.Remove(result.Data);
         _context.SaveChanges();
         return new SuccessResult("Hesap silindi!");
+    }
+
+    public IDataResult<List<Account>> GetUsersWithoutGroup()
+    {
+        var accounts = _context.Accounts.Where(a=>a.UserGroupId == null).ToList();
+        return new SuccessDataResult<List<Account>>(accounts);
+    }
+    
+    public IDataResult<List<Account>> GetUsersWithPermissions()
+    {
+    //    var accounts = _context.Accounts
+    //.Join(
+    //    _context.GroupAccounts,
+    //    account => account.Id,
+    //    groupAccount => groupAccount.AccountId,
+    //    (account, groupAccount) => new UserWithPermissions
+    //    {
+    //        Id = account.Id,
+    //        FirstName = account.FirstName,
+    //        LastName = account.LastName,
+    //        Email = account.Email,
+    //        PasswordHash = account.PasswordHash,
+    //        Created = account.Created,
+    //        Updated = account.Updated,
+    //        UserGroupId = account.UserGroupId,
+    //        Role = account.Role,
+    //        CanCreate = groupAccount.CanCreate,
+    //        CanGetAll = groupAccount.CanGetAll,
+    //        CanUpdate = groupAccount.CanUpdate,
+    //        CanRemove = groupAccount.CanRemove,
+    //        CanActive = groupAccount.CanActive,
+    //        CanInActive = groupAccount.CanInActive,
+    //        CanRestart = groupAccount.CanRestart,
+    //    }
+    //).ToList();
+        //  
+        var accounts = _context.Accounts.Include(s => s.GroupAccount).ToList();
+        return new SuccessDataResult<List<Account>>(accounts);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Model.DTOs.Accounts;
+﻿using Model;
+using Model.DTOs.Accounts;
 using Model.Results;
 
 namespace Business.Abstract;
@@ -12,4 +13,6 @@ public interface IAccountSupply
     Task<IDataResult<AccountResponse>> Create(CreateRequest model);
     IDataResult<AccountResponse> Update(int id, UpdateRequest model);
     IResult Delete(int id);
+    IDataResult<List<Account>> GetUsersWithoutGroup();
+    IDataResult<List<Account>> GetUsersWithPermissions();
 }
