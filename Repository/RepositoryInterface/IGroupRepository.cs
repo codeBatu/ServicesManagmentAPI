@@ -14,8 +14,7 @@ namespace Repository.RepositoryInterface
         Task<IResult> AddGroupAdmin(Account account, int groupId);
 
         Task<IResult> Update(int id, UserGroup entity);
-
-
+        new Task<IDataResult<int>> Create(UserGroup entity);
 
     }
 }

@@ -13,7 +13,7 @@ namespace Business.Abstract
     {
         Task<IResult> AddUserGroup(int Userİd, int groupId);
         Task<IResult> AddGroupAdmin(Account account, int groupId);
-        Task<IResult> Create(UserGroup entity);
+        Task<IDataResult<int>> Create(UserGroup entity);
         IDataResult<UserGroup> Get(int id);
         IDataResult<List<UserGroup>> GetAll();
         Task<IResult> Update(int id, UserGroup entity);
