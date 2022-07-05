@@ -82,6 +82,22 @@ public class AccountsController : BaseController
         return Ok(accounts);
     }
 
+    [AllowAnonymous]
+    [HttpGet("getWithPermissions")]
+    public ActionResult<IEnumerable<UserWithPermissions>> GetAllWithPermissions()
+    {
+        var accounts = _accountManager.GetUsersWithPermissions();
+        return Ok(accounts);
+    }
+    
+    [AllowAnonymous]
+    [HttpGet("getWithoutGroup")]
+    public ActionResult<IEnumerable<UserWithPermissions>> GetAllWithoutGroup()
+    {
+        var accounts = _accountManager.GetUsersWithoutGroup();
+        return Ok(accounts);
+    }
+
     [HttpGet("{id:int}")]
     public ActionResult<AccountResponse> GetById(int id)
     {
