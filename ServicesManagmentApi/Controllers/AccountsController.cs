@@ -14,24 +14,30 @@ public class AccountsController : BaseController
 {
     private readonly IAccountSupply _accountManager;
     private readonly IGroupSupply _groupManager;
+    private readonly IAuthorizationUserSupply _authorizationUserSupply;
 
-    public AccountsController(IAccountSupply accountManager, IGroupSupply groupManager)
+    public AccountsController(IAccountSupply accountManager, IGroupSupply groupManager, IAuthorizationUserSupply authorizationUserSupply)
     {
         _accountManager = accountManager;
         _groupManager = groupManager;
+        _authorizationUserSupply = authorizationUserSupply;
     }
 
     [AllowAnonymous]
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterRequest model)
     {
+        
         var result = await _accountManager.Register(model);
-       
+      
+               
         if (!result.Success)
         {
             return BadRequest(result);
         }
+        await _authorizationUserSupply.Create(new GroupAccount { AccountId = result.Data });
         return Ok(result);
+
     }
 
     [AllowAnonymous]
@@ -85,12 +91,13 @@ public class AccountsController : BaseController
 
         return Ok(accounts);
     }
-
-    [Authorize(Role.Admin)]
+    
+    [Authorize(Role.Admin,Role.GroupAdmin)]
     [HttpGet("getWithPermissions")]
     public ActionResult<IEnumerable<Account>> GetAllWithPermissions()
     {
         var accounts = _accountManager.GetUsersWithPermissions();
+        if (Account.Role == Role.GroupAdmin) return Ok( accounts.Data.Where(z => z.UserGroupId == Account.UserGroupId)); 
         return Ok(accounts);
     }
 
@@ -99,11 +106,12 @@ public class AccountsController : BaseController
     public ActionResult<IEnumerable<UserWithPermissions>> GetAllWithoutGroup()
     {
         var accounts = _accountManager.GetUsersWithoutGroup();
+      
         return Ok(accounts);
     }
 
     [Authorize(Role.Admin, Role.GroupAdmin)]
-    [HttpPut("addUserToigroup")]
+    [HttpPut("addUserToGgroup")]
     public ActionResult<Model.Results.IResult> AddUserToGroup(int id, int groupId)
     {
         if (Account.Role == Role.GroupAdmin && !(Account.UserGroupId == groupId))
@@ -128,7 +136,7 @@ public class AccountsController : BaseController
 
     }
 
-    [HttpGet("{id:int}")]
+    [HttpGet("getUser/{id:int}")]
     public ActionResult<AccountResponse> GetById(int id)
     {
         // users can get their own account, admins can get any account

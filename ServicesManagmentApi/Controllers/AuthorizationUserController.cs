@@ -118,11 +118,22 @@ namespace ServicesManagmentApi.Controllers
             return Ok(result);
         }
         [Authorize(Role.Admin, Role.GroupAdmin)]
-        [HttpPut("CanUpdateService")]
-        public async Task<ActionResult<GroupAccount>> CanUpdate(int id, bool canUpdate)
+        [HttpPut("UpdateUser")]
+        public async Task<ActionResult<IResult>> Update(GroupAccount groupAccount)
         {
-            var result = await _authorizationUser.CanUpdate(id, canUpdate);
-
+            if (Account.Role == Role.GroupAdmin)
+            {
+                var account = _accountManager.GetById(groupAccount.AccountId);
+                if (account.UserGroupId != Account.UserGroupId)
+                {
+                    return Unauthorized();
+                }
+            }
+            var result = await _authorizationUser.Update(groupAccount);
+            if (!result.Success)
+            {
+                return BadRequest();
+            }
             return Ok(result);
         }
 

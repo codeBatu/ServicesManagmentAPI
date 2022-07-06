@@ -95,5 +95,13 @@ namespace Repository
         {
             return await _context.GroupAccounts.FindAsync(id);
         }
+
+        //
+        public async Task<IResult> Update(GroupAccount groupAccount)
+        {
+            _context.GroupAccounts.Update(groupAccount);
+            return await saveChanges();
+        }
+      
     }
 }

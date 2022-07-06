@@ -117,6 +117,7 @@ namespace Repository
         public IDataResult<List<UserGroup>> GetAll()
         {
             var list = _context!.UserGroups.Include(s => s.Accounts).ToList();
+            
             if (list is null)
             {
                 return new ErrorDataResult<List<UserGroup>>("Grup bulunamadı.");

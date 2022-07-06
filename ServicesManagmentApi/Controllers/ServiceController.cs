@@ -8,7 +8,7 @@ using ServicesManagmentApi.Controllers;
 
 namespace ServiceManagerWepApi.Controllers
 {
-    [Authorize]
+   [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class serviceController : BaseController
@@ -190,6 +190,5 @@ namespace ServiceManagerWepApi.Controllers
             }
             return Ok(result);
         }
-
     }
 }

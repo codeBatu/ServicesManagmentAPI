@@ -10,8 +10,12 @@ namespace Repository.RepositoryInterface
 {
     public interface IAuthorizationUser
     {
+       
+Task<IResult> Update(GroupAccount groupAccount);
+
+
         Task<IResult> Create(GroupAccount groupAccount);
-        Task<IResult> CanUpdate(int id, bool permission);
+
 
         Task<IResult> CanCreate(int id, bool permission);
         Task<IResult> CanRemove(int id, bool permission);

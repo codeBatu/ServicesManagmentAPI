@@ -23,7 +23,8 @@ public class AccountRepository : IAccountRepository
 
     public async Task<IResult> Create(Account entity)
     {
-        
+       
+
         _context.Accounts.Add(entity);
         var result = await _context.SaveChangesAsync();
 
@@ -32,6 +33,19 @@ public class AccountRepository : IAccountRepository
             return new ErrorResult("Hesap kaydedilemedi!.");
         }
         return new SuccessResult("Hesap başarıyla kaydedildi.");
+    }
+    public async Task<IDataResult<int>> Register(Account entity)
+    {
+
+
+        _context.Accounts.Add(entity);
+        var result = await _context.SaveChangesAsync();
+
+        if (result < 1)
+        {
+            return new ErrorDataResult<int>("Hesap kaydedilemedi!.");
+        }
+        return new SuccessDataResult<int>(entity.Id, "Hesap başarıyla kaydedildi.");
     }
 
     public IDataResult<Account> Get(int id)
@@ -94,35 +108,35 @@ public class AccountRepository : IAccountRepository
         return new SuccessDataResult<List<Account>>(accounts);
     }
     
-    public IDataResult<List<Account>> GetUsersWithPermissions()
+    public IDataResult<List<UserWithPermissions>> GetUsersWithPermissions()
     {
-    //    var accounts = _context.Accounts
-    //.Join(
-    //    _context.GroupAccounts,
-    //    account => account.Id,
-    //    groupAccount => groupAccount.AccountId,
-    //    (account, groupAccount) => new UserWithPermissions
-    //    {
-    //        Id = account.Id,
-    //        FirstName = account.FirstName,
-    //        LastName = account.LastName,
-    //        Email = account.Email,
-    //        PasswordHash = account.PasswordHash,
-    //        Created = account.Created,
-    //        Updated = account.Updated,
-    //        UserGroupId = account.UserGroupId,
-    //        Role = account.Role,
-    //        CanCreate = groupAccount.CanCreate,
-    //        CanGetAll = groupAccount.CanGetAll,
-    //        CanUpdate = groupAccount.CanUpdate,
-    //        CanRemove = groupAccount.CanRemove,
-    //        CanActive = groupAccount.CanActive,
-    //        CanInActive = groupAccount.CanInActive,
-    //        CanRestart = groupAccount.CanRestart,
-    //    }
-    //).ToList();
-        //  
-        var accounts = _context.Accounts.Include(s => s.GroupAccount).ToList();
-        return new SuccessDataResult<List<Account>>(accounts);
+        var accounts = _context.Accounts
+    .Join(
+        _context.GroupAccounts,
+        account => account.Id,
+        groupAccount => groupAccount.AccountId,
+        (account, groupAccount) => new UserWithPermissions
+        {
+            Id = account.Id,
+            FirstName = account.FirstName,
+            LastName = account.LastName,
+            Email = account.Email,
+            PasswordHash = account.PasswordHash,
+            Created = account.Created,
+            Updated = account.Updated,
+            UserGroupId = account.UserGroupId,
+            Role = account.Role,
+            CanCreate = groupAccount.CanCreate,
+            CanGetAll = groupAccount.CanGetAll,
+            CanUpdate = groupAccount.CanUpdate,
+            CanRemove = groupAccount.CanRemove,
+            CanActive = groupAccount.CanActive,
+            CanInActive = groupAccount.CanInActive,
+            CanRestart = groupAccount.CanRestart,
+        }
+    ).ToList();
+
+        //    var accounts = _context.Accounts.Include(s => s.GroupAccount).ToList();
+        return new SuccessDataResult<List<UserWithPermissions>>(accounts);
     }
 }

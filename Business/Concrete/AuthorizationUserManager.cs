@@ -50,10 +50,17 @@ namespace Business.Concrete
             return await _user.CanRestart(id, permission);
         }
 
-        public async Task<IResult> CanUpdate(int id, bool permission)
+      
+        public async Task<IResult> Create(GroupAccount groupAccount)
         {
-            return await _user.CanUpdate(id, permission);
+            return await _user.Create(groupAccount);
         }
+     
+public async Task<IResult> Update(GroupAccount groupAccount)
+        {
+            return await _user.Update(groupAccount);
+        }
+
 
         public async Task<IDataResult<GroupAccount>> GetById(int id)
         {

@@ -12,7 +12,7 @@ namespace ServicesManagmentApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GroupController : ControllerBase
+    public class GroupController : BaseController
     {
         private readonly IGroupSupply groupRepository;
 
@@ -60,7 +60,23 @@ namespace ServicesManagmentApi.Controllers
         [HttpGet("getAllGroup")]
         public IActionResult GetAllService()
         {
+
+            if (Account.Role == Role.GroupAdmin)
+            {
+
+                var userGroup = groupRepository.Get((int)Account.UserGroupId);
+               
+                var list = new List<UserGroup> { userGroup.Data };
+
+                return Ok(list);
+                
+
+            }
             var result = groupRepository!.GetAll();
+            if (Account.Role == Role.User)
+            {
+                return Unauthorized();
+            }
             if (!result.Success)
             {
                 return BadRequest(result);

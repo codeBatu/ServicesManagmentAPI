@@ -110,17 +110,17 @@ public class AccountManager : IAccountSupply
         return _accountDal.GetUsersWithoutGroup();
     }
 
-    public IDataResult<List<Account>> GetUsersWithPermissions()
+    public IDataResult<List<UserWithPermissions>> GetUsersWithPermissions()
     {
         return _accountDal.GetUsersWithPermissions();
     }
 
-    public async Task<IResult> Register(RegisterRequest model)
+    public async Task<IDataResult<int>> Register(RegisterRequest model)
     {
         // validate
         if (_accountDal.CheckIfEmailExists(model.Email))
         {
-            return new ErrorResult("Bu email kullanılıyor.");
+            return new ErrorDataResult<int>("Bu email kullanılıyor.");
         }
 
         // map model to new account object
@@ -133,11 +133,11 @@ public class AccountManager : IAccountSupply
 
         // hash password
         account.PasswordHash = BCrypt.HashPassword(model.Password);
-
+        
         // save to db
-        var result = await _accountDal.Create(account);
+    var user=    await _accountDal.Register(account);
 
-        return result;
+        return user;
     }
 
     public IDataResult<AccountResponse> Update(int id, UpdateRequest model)
