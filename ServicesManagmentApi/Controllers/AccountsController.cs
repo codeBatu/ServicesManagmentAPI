@@ -26,6 +26,7 @@ public class AccountsController : BaseController
     public async Task<IActionResult> Register(RegisterRequest model)
     {
         var result = await _accountManager.Register(model);
+       
         if (!result.Success)
         {
             return BadRequest(result);
@@ -87,7 +88,7 @@ public class AccountsController : BaseController
 
     [Authorize(Role.Admin)]
     [HttpGet("getWithPermissions")]
-    public ActionResult<IEnumerable<UserWithPermissions>> GetAllWithPermissions()
+    public ActionResult<IEnumerable<Account>> GetAllWithPermissions()
     {
         var accounts = _accountManager.GetUsersWithPermissions();
         return Ok(accounts);
@@ -146,7 +147,7 @@ public class AccountsController : BaseController
     }
 
 
-    [HttpPut("{id:int}")]
+    [HttpPut("update/{id:int}")]
     public ActionResult<AccountResponse> Update(int id, UpdateRequest model)
     {
         // users can update their own account and admins can update any account

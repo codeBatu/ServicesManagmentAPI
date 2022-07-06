@@ -16,6 +16,6 @@ namespace Model
         public Role? Role { get; set; }
 
         public  UserGroup? UserGroup { get; set; }
-        public  GroupAccount GroupAccount { get; set; } = null!;
+        public  GroupAccount GroupAccount { get; set; } = null;
     }
 }

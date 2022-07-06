@@ -110,7 +110,7 @@ public class AccountManager : IAccountSupply
         return _accountDal.GetUsersWithoutGroup();
     }
 
-    public IDataResult<List<UserWithPermissions>> GetUsersWithPermissions()
+    public IDataResult<List<Account>> GetUsersWithPermissions()
     {
         return _accountDal.GetUsersWithPermissions();
     }

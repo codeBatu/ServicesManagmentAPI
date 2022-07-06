@@ -14,5 +14,5 @@ public interface IAccountSupply
     IDataResult<AccountResponse> Update(int id, UpdateRequest model);
     IResult Delete(int id);
     IDataResult<List<Account>> GetUsersWithoutGroup();
-    IDataResult<List<UserWithPermissions>> GetUsersWithPermissions();
+    IDataResult<List<Account>> GetUsersWithPermissions();
 }

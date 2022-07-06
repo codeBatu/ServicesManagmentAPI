@@ -13,6 +13,6 @@ public interface IAccountRepository : IGenericRepository<Account, int>
     bool IsFirstAccount();
     bool IsEmailRegistered(string email);
     IResult Delete(int id);
-    IDataResult<List<UserWithPermissions>> GetUsersWithPermissions();
+    IDataResult<List<Account>> GetUsersWithPermissions();
     IDataResult<List<Account>> GetUsersWithoutGroup();
 }
