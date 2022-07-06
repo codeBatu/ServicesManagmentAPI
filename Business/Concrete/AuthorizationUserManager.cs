@@ -54,5 +54,15 @@ namespace Business.Concrete
         {
             return await _user.CanUpdate(id, permission);
         }
+
+        public async Task<IDataResult<GroupAccount>> GetById(int id)
+        {
+            var account = await _user.GetById(id);
+            if (account is null)
+            {
+                return new ErrorDataResult<GroupAccount>("Hesap bulunamadı.");
+            }
+            return new SuccessDataResult<GroupAccount>(account);
+        }
     }
 }

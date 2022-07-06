@@ -19,5 +19,6 @@ namespace Business.Abstract
         Task<IResult> CanActive(int id, bool permission);
         Task<IResult> CanInActive(int id, bool permission);
         Task<IResult> CanRestart(int id, bool permission);
+        Task<IDataResult<GroupAccount>> GetById(int id);
     }
 }
