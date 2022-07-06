@@ -90,5 +90,10 @@ namespace Repository
             }
             return new SuccessResult("Hesap başarıyla kaydedildi.");
         }
+
+        public async Task<GroupAccount> GetById(int id)
+        {
+            return await _context.GroupAccounts.FindAsync(id);
+        }
     }
 }
