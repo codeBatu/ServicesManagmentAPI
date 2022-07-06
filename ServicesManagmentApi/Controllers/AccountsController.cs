@@ -85,7 +85,7 @@ public class AccountsController : BaseController
 
         return Ok(accounts);
     }
-
+    
     [Authorize(Role.Admin)]
     [HttpGet("getWithPermissions")]
     public ActionResult<IEnumerable<Account>> GetAllWithPermissions()
@@ -103,7 +103,7 @@ public class AccountsController : BaseController
     }
 
     [Authorize(Role.Admin, Role.GroupAdmin)]
-    [HttpPut("addUserToigroup")]
+    [HttpPut("addUserToGgroup")]
     public ActionResult<Model.Results.IResult> AddUserToGroup(int id, int groupId)
     {
         if (Account.Role == Role.GroupAdmin && !(Account.UserGroupId == groupId))

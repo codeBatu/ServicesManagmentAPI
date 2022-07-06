@@ -190,6 +190,5 @@ namespace ServiceManagerWepApi.Controllers
             }
             return Ok(result);
         }
-
     }
 }
