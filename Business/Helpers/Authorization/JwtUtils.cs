@@ -29,7 +29,7 @@ public class JwtUtils : IJwtUtils
 
     public string GenerateJwtToken(Account account)
     {
-        // generate token that is valid for 15 minutes
+      
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
         var tokenDescriptor = new SecurityTokenDescriptor
