@@ -137,5 +137,10 @@ namespace Repository
             await saveChanges("Group Güncelleme");
             return new SuccessResult(" Başarıyla güncellendi.");
         }
+
+        Task<IResult> IGenericRepository<UserGroup, int>.Create(UserGroup entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

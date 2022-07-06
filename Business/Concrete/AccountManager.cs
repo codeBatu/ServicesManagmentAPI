@@ -14,18 +14,21 @@ using System.Collections.Generic;
 public class AccountManager : IAccountSupply
 {
     private readonly IAccountRepository _accountDal;
+    private readonly IAuthorizationUser _groupAccountDal;
     private readonly IJwtUtils _jwtUtils;
     private readonly IMapper _mapper;
     private readonly AppSettings _appSettings;
 
     public AccountManager(
         IAccountRepository accountDal,
+        IAuthorizationUser groupAccountDal,
         IJwtUtils jwtUtils,
         IMapper mapper,
         IOptions<AppSettings> appSettings
         )
     {
         _accountDal = accountDal;
+        _groupAccountDal = groupAccountDal;
         _jwtUtils = jwtUtils;
         _mapper = mapper;
         _appSettings = appSettings.Value;
@@ -66,6 +69,20 @@ public class AccountManager : IAccountSupply
 
         // save account
         await _accountDal.Create(account);
+        if (account.Role == Role.User)
+        {
+            await _groupAccountDal.Create(new GroupAccount
+            {
+                AccountId = account.Id,
+                CanGetAll = true,
+                CanActive = false,
+                CanCreate = false,
+                CanInActive = false,
+                CanRemove = false,
+                CanRestart = false,
+                CanUpdate = false
+            });
+        }
 
         var response = _mapper.Map<AccountResponse>(account);
         return new SuccessDataResult<AccountResponse>(response);

@@ -10,14 +10,15 @@ namespace Repository.RepositoryInterface
 {
     public interface IAuthorizationUser
     {
-        Task<IResult> CanUpdate(int id, GroupAccount groupAccount);
+        Task<IResult> Create(GroupAccount groupAccount);
+        Task<IResult> CanUpdate(int id, bool permission);
 
-        Task<IResult> CanCreate(int id, GroupAccount groupAccount);
-        Task<IResult> CanRemove(int id, GroupAccount groupAccount);
-        Task<IResult> CanGetAll(int id, GroupAccount groupAccount);
+        Task<IResult> CanCreate(int id, bool permission);
+        Task<IResult> CanRemove(int id, bool permission);
+        Task<IResult> CanGetAll(int id, bool permission);
 
-        Task<IResult> CanActive(int id, GroupAccount groupAccount);
-        Task<IResult> CanInActive(int id, GroupAccount groupAccount);
-        Task<IResult> CanRestart(int id, GroupAccount groupAccount);
+        Task<IResult> CanActive(int id, bool permission);
+        Task<IResult> CanInActive(int id, bool permission);
+        Task<IResult> CanRestart(int id, bool permission);
     }
 }

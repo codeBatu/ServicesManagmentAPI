@@ -70,7 +70,7 @@ public class AccountsController : BaseController
     }
 
     // only admins can view all the users and group admins can view the users in their group
-    // [Authorize(Role.Admin,Role.GroupAdmin)]
+    [Authorize(Role.Admin, Role.GroupAdmin)]
     [HttpGet]
     public ActionResult<IEnumerable<AccountResponse>> GetAll()
     {
@@ -102,7 +102,7 @@ public class AccountsController : BaseController
     }
 
     [Authorize(Role.Admin, Role.GroupAdmin)]
-    [HttpGet("getWithoutGroup")]
+    [HttpPut("addUserToigroup")]
     public ActionResult<Model.Results.IResult> AddUserToGroup(int id, int groupId)
     {
         if (Account.Role == Role.GroupAdmin && !(Account.UserGroupId == groupId))
