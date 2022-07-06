@@ -92,7 +92,7 @@ namespace ServiceManagerWepApi.Controllers
             }
             return Ok(result);
         }
-        [Authorize(Role.Admin, Role.GroupAdmin)]
+       
         [HttpPut("restartService")]
         public async Task<IActionResult> RestartServices(int id)
         {
