@@ -19,40 +19,40 @@ namespace Business.Concrete
             _user = user;
         }
 
-        public async Task<IResult> CanActive(int id, GroupAccount groupAccount)
+        public async Task<IResult> CanActive(int id, bool permission)
         {
-      return  await _user.CanActive(id, groupAccount);
-            
+            return await _user.CanActive(id, permission);
+
         }
 
-        public async Task<IResult> CanCreate(int id, GroupAccount groupAccount)
+        public async Task<IResult> CanCreate(int id, bool permission)
         {
-            return await _user.CanCreate(id,groupAccount);
+            return await _user.CanCreate(id, permission);
         }
 
-        public async Task<IResult> CanGetAll(int id, GroupAccount groupAccount)
+        public async Task<IResult> CanGetAll(int id, bool permission)
         {
-            return await _user.CanGetAll(id, groupAccount);
+            return await _user.CanGetAll(id, permission);
         }
 
-        public async Task<IResult> CanInActive(int id, GroupAccount groupAccount)
+        public async Task<IResult> CanInActive(int id, bool permission)
         {
-            return await _user.CanInActive(id, groupAccount);
+            return await _user.CanInActive(id, permission);
         }
 
-        public async Task<IResult> CanRemove(int id, GroupAccount groupAccount)
+        public async Task<IResult> CanRemove(int id, bool permission)
         {
-            return await _user.CanRemove(id, groupAccount);
+            return await _user.CanRemove(id, permission);
         }
 
-        public async Task<IResult> CanRestart(int id, GroupAccount groupAccount)
+        public async Task<IResult> CanRestart(int id, bool permission)
         {
-            return await _user.CanRestart(id, groupAccount);
+            return await _user.CanRestart(id, permission);
         }
 
-        public async Task<IResult> CanUpdate(int id, GroupAccount groupAccount)
+        public async Task<IResult> CanUpdate(int id, bool permission)
         {
-            return await _user.CanUpdate(id, groupAccount);
+            return await _user.CanUpdate(id, permission);
         }
     }
 }

@@ -73,24 +73,22 @@ namespace Repository
             
         }
 
-        public async Task<IResult> Create(UserGroup entity)
+        public async Task<IDataResult<int>> Create(UserGroup entity)
         {
-            // isme göre servis bilgisi getir
             var result = await _context.UserGroups.FirstOrDefaultAsync(x => x.GroupName == entity.GroupName);
-            // eğer aynı isimde bir servis varsa error result dön
             if (result is not null)
             {
-                return new ErrorResult("Aynı isimde grup sistemde kayıtlı.");
+                return new ErrorDataResult<int>("Aynı isimde grup sistemde kayıtlı.");
             }
 
             _context!.UserGroups.Add(entity);
             var saveResponseCode = await _context.SaveChangesAsync();
             if (saveResponseCode < 1)
             {
-                return new ErrorResult("Servis kaydedilemedi!");
+                return new ErrorDataResult<int>("Grup kaydedilemedi!");
 
             }
-            return new SuccessResult("Servis başarıyla kaydedildi.");
+            return new SuccessDataResult<int>(entity.Id,"Grup başarıyla kaydedildi.");
         }
         /// <summary>
         /// ServiceName göre servisi tablosundaki veriyi getirir
@@ -138,6 +136,11 @@ namespace Repository
             _context.Update(entity);
             await saveChanges("Group Güncelleme");
             return new SuccessResult(" Başarıyla güncellendi.");
+        }
+
+        Task<IResult> IGenericRepository<UserGroup, int>.Create(UserGroup entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }

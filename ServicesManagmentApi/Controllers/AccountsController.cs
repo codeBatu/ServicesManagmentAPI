@@ -3,6 +3,7 @@ using Business.Helpers.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 using Model.DTOs.Accounts;
+using Model.Results;
 
 namespace ServicesManagmentApi.Controllers;
 
@@ -12,10 +13,12 @@ namespace ServicesManagmentApi.Controllers;
 public class AccountsController : BaseController
 {
     private readonly IAccountSupply _accountManager;
+    private readonly IGroupSupply _groupManager;
 
-    public AccountsController(IAccountSupply accountManager)
+    public AccountsController(IAccountSupply accountManager, IGroupSupply groupManager)
     {
         _accountManager = accountManager;
+        _groupManager = groupManager;
     }
 
     [AllowAnonymous]
@@ -68,7 +71,7 @@ public class AccountsController : BaseController
     }
 
     // only admins can view all the users and group admins can view the users in their group
-   // [Authorize(Role.Admin,Role.GroupAdmin)]
+    [Authorize(Role.Admin, Role.GroupAdmin)]
     [HttpGet]
     public ActionResult<IEnumerable<AccountResponse>> GetAll()
     {
@@ -83,15 +86,15 @@ public class AccountsController : BaseController
         return Ok(accounts);
     }
 
-    [AllowAnonymous]
+    [Authorize(Role.Admin)]
     [HttpGet("getWithPermissions")]
     public ActionResult<IEnumerable<Account>> GetAllWithPermissions()
     {
         var accounts = _accountManager.GetUsersWithPermissions();
         return Ok(accounts);
     }
-    
-    [AllowAnonymous]
+
+    [Authorize(Role.Admin)]
     [HttpGet("getWithoutGroup")]
     public ActionResult<IEnumerable<UserWithPermissions>> GetAllWithoutGroup()
     {
@@ -99,7 +102,33 @@ public class AccountsController : BaseController
         return Ok(accounts);
     }
 
-    [HttpGet("getUser/{id:int}")]
+    [Authorize(Role.Admin, Role.GroupAdmin)]
+    [HttpPut("addUserToigroup")]
+    public ActionResult<Model.Results.IResult> AddUserToGroup(int id, int groupId)
+    {
+        if (Account.Role == Role.GroupAdmin && !(Account.UserGroupId == groupId))
+        {
+            return BadRequest(new ErrorResult("group admins can only add to their group"));
+        }
+
+        var result = _groupManager.Get(groupId);
+        if (!result.Success)
+        {
+            return BadRequest(new ErrorResult("group cannot found"));
+        }
+
+        var user = _accountManager.GetById(id);
+        if (user is null)
+        {
+            return BadRequest(new ErrorResult("user cannot found"));
+        }
+
+        _accountManager.Update(id, new UpdateRequest { UserGroupId = groupId });
+        return Ok(new SuccessResult($"user added to {result.Data.GroupName}"));
+
+    }
+
+    [HttpGet("{id:int}")]
     public ActionResult<AccountResponse> GetById(int id)
     {
         // users can get their own account, admins can get any account
@@ -116,7 +145,7 @@ public class AccountsController : BaseController
 
         return Ok(account);
     }
-    
+
 
     [HttpPut("update/{id:int}")]
     public ActionResult<AccountResponse> Update(int id, UpdateRequest model)

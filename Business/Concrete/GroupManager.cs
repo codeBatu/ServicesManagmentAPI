@@ -1,13 +1,7 @@
 ﻿using Business.Abstract;
-using Microsoft.AspNetCore.Http;
 using Model;
 using Model.Results;
 using Repository.RepositoryInterface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
@@ -29,7 +23,7 @@ namespace Business.Concrete
             return await groupRepository.AddUserGroup(Userİd, groupId);
         }
 
-        public async Task<Model.Results.IResult> Create(UserGroup entity)
+        public async Task<IDataResult<int>> Create(UserGroup entity)
         {
             return await groupRepository.Create(entity);
         }

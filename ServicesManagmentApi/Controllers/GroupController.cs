@@ -68,7 +68,7 @@ namespace ServicesManagmentApi.Controllers
             return Ok(result);
         }
       
-        [HttpGet("GetServiceById")]
+        [HttpGet("GetGroupById")]
         public IActionResult GetById(int id)
         {
             var result = groupRepository!.Get(id);

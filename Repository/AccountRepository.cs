@@ -4,11 +4,6 @@ using Model.DTOs.Accounts;
 using Model.Results;
 using Repository.DbContexts;
 using Repository.RepositoryInterface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repository;
 
